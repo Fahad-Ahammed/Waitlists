@@ -13,23 +13,24 @@ const poppins = Poppins({
 // NavBar component
 type NavBarProps = {
   isOpen: boolean;
+  toggleSidebar?: () => void;
 };
 
 const SideBar: React.FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(true);
 
-  const toggleSidebar = () => {
+  const toggleSidebar = (): void => {
     setIsOpen(!isOpen);
   };
-
+  //
   return (
     <>
       <header
-        className={`absolute left-0 top-0 h-[65px] w-full bg-[#F8FAFC] ${isOpen ? "border-b overflow-visible" : "overflow-hidden"} py-[15px] duration-[500ms] ease-in-out md:relative md:left-[unset] md:top-[unset] md:flex md:h-screen md:w-[230px] md:flex-col md:border-none md:p-0`}
+        className={`absolute left-0 top-0 h-[65px] w-full bg-[#F8FAFC] ${isOpen ? "border-b" : ""} py-[15px] duration-[500ms] ease-in-out md:relative md:left-[unset] md:top-[unset] md:flex md:h-screen md:flex-col md:border-none md:pb-[8px] md:pt-[12px] ${isOpen ? "md:w-[230px]" : "md:w-[64px]"} `}
       >
-        <div className="max-md:mx-auto max-md:w-[90%] max-md:max-w-[1300px]">
-          <div className="flex items-center max-md:flex">
-            <Logo isOpen={isOpen} />
+        <div className="max-md:mx-auto max-md:w-[90%] md:mx-[10px] md:mb-[15px] md:py-[10px] lg:mx-[8px] lg:mb-[12px] lg:py-[8px]">
+          <div className="flex items-center gap-x-[4px] lg:gap-x-[8px]">
+            <Logo isOpen={isOpen} toggleSidebar={toggleSidebar} />
             {/* hamburger start*/}
             <button
               onClick={toggleSidebar}
@@ -55,6 +56,31 @@ const SideBar: React.FC = () => {
               ></span>
             </button>
             {/* hamburger end*/}
+            <svg
+              onClick={toggleSidebar}
+              className={`${isOpen ? "md:block" : "md:hidden"} ml-auto hidden shrink-0 cursor-pointer`}
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12.6667 2H3.33333C2.59695 2 2 2.59695 2 3.33333V12.6667C2 13.403 2.59695 14 3.33333 14H12.6667C13.403 14 14 13.403 14 12.6667V3.33333C14 2.59695 13.403 2 12.6667 2Z"
+                stroke="#64748B"
+                stroke-width="0.666667"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M8 2V14"
+                stroke="#64748B"
+                stroke-width="0.666667"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <rect x="8" y="2" width="6" height="12" rx="1" fill="#64748B" />
+            </svg>
           </div>
         </div>
         <NavBar isOpen={isOpen} />
@@ -63,14 +89,17 @@ const SideBar: React.FC = () => {
   );
 };
 
-const Logo: React.FC<NavBarProps> = ({ isOpen }) => {
+const Logo: React.FC<NavBarProps> = ({ isOpen, toggleSidebar }) => {
   return (
-    <div
-      className={`${isOpen ? "max-md:invisible" : ""} flex items-center gap-x-[4px] lg:gap-x-[8px]`}
-    >
+    <>
       {/*front.desk logo */}
       <svg
-        className="h-[32px] w-[32px] shrink-0 lg:h-[22px] lg:w-[22px]"
+        onClick={() => {
+          if (toggleSidebar && !isOpen && window.innerWidth > 767) {
+            toggleSidebar();
+          }
+        }}
+        className={`${isOpen ? "md:ml-0" : "md:ml-[11px]"} h-[32px] w-[32px] shrink-0 cursor-pointer md:h-[22px] md:w-[22px] md:duration-300 md:ease-in-out`}
         viewBox="0 0 22 22"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -113,35 +142,36 @@ const Logo: React.FC<NavBarProps> = ({ isOpen }) => {
         />
       </svg>
       <h2
-        className={`${poppins.className} relative w-fit text-center text-[28px] leading-[32px] text-[#262626] lg:text-[18px] lg:leading-[24px]`}
+        className={`${poppins.className} truncate md:overflow-hidden md:duration-300 ${isOpen ? "md:max-w-full" : "md:max-w-0"} relative w-fit text-center text-[28px] leading-[32px] text-[#262626] md:text-[18px] md:leading-[24px]`}
       >
         <span
-          className={`after:[""] relative mr-[7px] after:absolute after:right-[-6px] after:top-[51%] after:h-[5px] after:w-[5px] after:translate-y-[-50%] after:rounded-full after:bg-[#262626] lg:mr-[7px] after:lg:right-[-6px] lg:after:top-[53%] after:lg:h-[4px] after:lg:w-[4px]`}
+          className={`after:[""] relative mr-[7px] after:absolute after:right-[-6px] after:top-[51%] after:h-[5px] after:w-[5px] after:translate-y-[-50%] after:rounded-full after:bg-[#262626] md:mr-[7px] after:md:right-[-6px] md:after:top-[53%] after:md:h-[4px] after:md:w-[4px]`}
         >
           Front
         </span>
         <span>Desk</span>
       </h2>
-    </div>
+    </>
   );
 };
 
 const NavBar: React.FC<NavBarProps> = ({ isOpen }) => {
-  const navStyles =
-    "flex gap-x-[5px] mb-[10px] py-[5px] text-[#334155] items-center font-[500] text-[20px] leading-[28px]";
+  const navStyles = `flex items-center gap-x-[5px] ${isOpen ? "md:gap-x-[5px]" : "md:gap-x-0"} md:duration-300 md:ease-in-out text-[20px] font-[500] leading-[28px] text-[#334155] md:mb-0 md:text-[14px] md:leading-[20px] lg:text-[12px]`;
   return (
     <>
       <nav
-        className={`absolute left-0 top-[65px] flex-grow md:relative md:left-[unset] md:top-[unset] ${isOpen ? "translate-0 visible" : "invisible translate-x-[-100%]"} w-full bg-[#F8FAFC] pt-[20px] duration-300 ease-in-out md:pt-0`}
+        className={`absolute left-0 top-[65px] flex-grow md:relative md:left-[unset] md:top-[unset] ${isOpen ? "max-md:visible max-md:translate-x-0" : "max-md:invisible max-md:translate-x-[-100%]"} w-full bg-[#F8FAFC] pt-[20px] duration-300 ease-in-out md:pt-0`}
       >
-        <div className="mx-auto w-[90%] md:h-full md:w-full">
+        <div className="mx-auto w-[90%] md:mx-[10px] md:h-full md:w-[unset] lg:mx-[8px]">
           {/* needs to add timezone section here */}
           <div className="flex min-h-[calc(100vh-65px)] flex-col justify-between pb-[70px] min-[600px]:flex-row md:h-full md:min-h-[unset] md:flex-col md:pb-0">
-            <ul className="px-[15px]">
-              <li>
+            <ul>
+              <li
+                className={`${isOpen ? "md:mx-[0px]" : "md:mx-[5px]"} p-[8px] md:duration-300 md:ease-in-out`}
+              >
                 <Link href={"#"} className={navStyles}>
                   <svg
-                    className="h-[22px] w-[22px] md:h-[24px] md:w-[16px]"
+                    className="h-[22px] w-[22px] shrink-0 md:h-[16px] md:w-[16px]"
                     viewBox="0 0 16 16"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
@@ -159,13 +189,19 @@ const NavBar: React.FC<NavBarProps> = ({ isOpen }) => {
                       stroke-linejoin="round"
                     />
                   </svg>
-                  <span>Orders</span>
+                  <span
+                    className={`truncate md:overflow-hidden md:duration-300 ${isOpen ? "md:max-w-full" : "md:max-w-0"}`}
+                  >
+                    Orders
+                  </span>
                 </Link>
               </li>
-              <li>
+              <li
+                className={`${isOpen ? "md:mx-[0px]" : "md:mx-[5px]"} p-[8px] md:duration-300 md:ease-in-out`}
+              >
                 <Link href={"#"} className={navStyles}>
                   <svg
-                    className="h-[22px] w-[22px] md:h-[24px] md:w-[16px]"
+                    className="h-[22px] w-[22px] shrink-0 md:h-[16px] md:w-[16px]"
                     viewBox="0 0 16 16"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
@@ -196,13 +232,19 @@ const NavBar: React.FC<NavBarProps> = ({ isOpen }) => {
                       </clipPath>
                     </defs>
                   </svg>
-                  <span>Subscription</span>
+                  <span
+                    className={`truncate md:overflow-hidden md:duration-300 ${isOpen ? "md:max-w-full" : "md:max-w-0"}`}
+                  >
+                    Subscription
+                  </span>
                 </Link>
               </li>
-              <li>
+              <li
+                className={`${isOpen ? "md:mx-[0px]" : "md:mx-[5px]"} p-[8px] md:duration-300 md:ease-in-out`}
+              >
                 <Link href={""} className={navStyles}>
                   <svg
-                    className="h-[22px] w-[22px] md:h-[24px] md:w-[16px]"
+                    className="h-[22px] w-[22px] shrink-0 md:h-[16px] md:w-[16px]"
                     viewBox="0 0 16 16"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
@@ -268,13 +310,19 @@ const NavBar: React.FC<NavBarProps> = ({ isOpen }) => {
                       stroke-linejoin="round"
                     />
                   </svg>
-                  <span>Calendar</span>
+                  <span
+                    className={`truncate md:overflow-hidden md:duration-300 ${isOpen ? "md:max-w-full" : "md:max-w-0"}`}
+                  >
+                    Calendar
+                  </span>
                 </Link>
               </li>
-              <li>
+              <li
+                className={`${isOpen ? "md:mx-[0px]" : "md:mx-[5px]"} p-[8px] md:duration-300 md:ease-in-out`}
+              >
                 <Link href={"#"} className={navStyles}>
                   <svg
-                    className="h-[22px] w-[22px] md:h-[24px] md:w-[16px]"
+                    className="h-[22px] w-[22px] shrink-0 md:h-[16px] md:w-[16px]"
                     viewBox="0 0 16 16"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
@@ -286,15 +334,21 @@ const NavBar: React.FC<NavBarProps> = ({ isOpen }) => {
                       stroke-linejoin="round"
                     />
                   </svg>
-                  <span>Waitlist</span>
+                  <span
+                    className={`truncate md:overflow-hidden md:duration-300 ${isOpen ? "md:max-w-full" : "md:max-w-0"}`}
+                  >
+                    Waitlist
+                  </span>
                 </Link>
               </li>
             </ul>
             <ul>
-              <li>
-                <Link className={`px-[15px] ${navStyles}`} href={"#"}>
+              <li
+                className={` ${isOpen ? "md:mx-0" : "md:mx-[5px]"} mb-[12px] p-[8px] md:duration-300 md:ease-in-out lg:mb-[8px]`}
+              >
+                <Link className={`${navStyles}`} href={"#"}>
                   <svg
-                    className="h-[22px] w-[22px] md:h-[24px] md:w-[16px]"
+                    className={`h-[22px] w-[22px] shrink-0 md:h-[16px] md:w-[16px]`}
                     viewBox="0 0 16 16"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
@@ -324,9 +378,13 @@ const NavBar: React.FC<NavBarProps> = ({ isOpen }) => {
                       stroke-linejoin="round"
                     />
                   </svg>
-                  <span>Dashboard</span>
+                  <span
+                    className={`truncate md:overflow-hidden md:duration-300 ${isOpen ? "md:max-w-full" : "md:max-w-0"}`}
+                  >
+                    Dashboard
+                  </span>
                   <svg
-                    className="ml-auto h-[22px] w-[22px] md:h-[24px] md:w-[16px]"
+                    className={`${isOpen ? "md:h-[16px] md:w-[16px]" : "md:h-[0px] md:w-[0px]"} ml-auto h-[22px] w-[22px] shrink-0 ease-in-out md:overflow-hidden md:duration-300`}
                     viewBox="0 0 16 16"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
@@ -352,30 +410,45 @@ const NavBar: React.FC<NavBarProps> = ({ isOpen }) => {
                   </svg>
                 </Link>
               </li>
-              <li>
+              <li
+                className={`mb-[12px] rounded-[6px] bg-white shadow-sm lg:mb-[8px]`}
+              >
                 <button
-                  aria-label="Admin profile"
-                  className="mb-[2px] flex w-full items-center gap-x-[8px] rounded-[6px] bg-white px-[8px] py-[10px] shadow-[0px_1px_rgba(100,116,139,0.05)]"
+                  aria-expanded="false"
+                  aria-label="User info"
+                  className="mb-[2px] flex w-full items-center gap-x-[8px] px-[8px] py-[10px]"
                 >
-                  <Image
-                    className="shrink-0 rounded-full"
-                    src={"/user.png"}
-                    width={32}
-                    height={32}
-                    alt="User avatar"
-                  />
-                  <div className="text-left text-[18px] leading-[28px]">
-                    <span className="block font-[500] text-[#0F172A]">
+                  <div
+                    className={`relative ${isOpen ? "md:mx-[0px]" : "md:mx-[3px]"} h-[32px] w-[32px] shrink-0 overflow-hidden rounded-full md:h-[24px] md:w-[24px] md:duration-300 md:ease-in-out`}
+                  >
+                    <Image
+                      className="cover"
+                      src={"/user.png"}
+                      fill
+                      alt="User avatar"
+                    />
+                  </div>
+                  <div
+                    className={`md:overflow-hidden md:duration-300 ${isOpen ? "md:max-w-full" : "md:max-w-0"} text-left text-[18px] leading-[28px] md:text-[12px] md:leading-[20px]`}
+                  >
+                    <span
+                      aria-label="Admin name"
+                      tabIndex={0}
+                      className="block truncate font-[500] text-[#0F172A]"
+                    >
                       Admin name
                     </span>
-                    <span className="block font-[400] text-[#64748B]">
+                    <span
+                      aria-label="Admin email"
+                      tabIndex={0}
+                      className="block truncate font-[400] text-[#64748B]"
+                    >
                       adminname@mail.com
                     </span>
                   </div>
                   <svg
-                    className="ml-auto h-[22px] w-[22px] md:h-[24px] md:w-[16px]"
-                    width="16"
-                    height="16"
+                    tabIndex={0}
+                    className={`${isOpen ? "md:h-[16px] md:w-[16px]" : "md:h-[0px] md:w-[0px]"} ml-auto h-[22px] w-[22px] shrink-0`}
                     viewBox="0 0 16 16"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
@@ -391,12 +464,11 @@ const NavBar: React.FC<NavBarProps> = ({ isOpen }) => {
               </li>
               <li
                 tabIndex={0}
-                role="note"
-                className="flex items-center gap-x-[10px] px-[10px] py-[6px]"
+                className={`${isOpen ? "md:mx-0 md:h-[unset]" : "md:mx-[5px] md:h-[48px]"} flex items-center gap-x-[8px] px-[10px] py-[6px] md:px-[10px] md:duration-300 md:ease-in-out lg:px-[8px]`}
                 aria-label="Help Center information"
               >
                 <svg
-                  className="h-[26px] w-[26px] md:h-[24px] md:w-[16px]"
+                  className="h-[26px] w-[26px] shrink-0 md:h-[16px] md:w-[16px]"
                   viewBox="0 0 16 16"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
@@ -427,9 +499,13 @@ const NavBar: React.FC<NavBarProps> = ({ isOpen }) => {
                     </clipPath>
                   </defs>
                 </svg>
-                <div className="flex flex-col text-[18px] leading-[28px]">
-                  <span className="font-[400] text-[#334155]">Help Center</span>
-                  <span className="text-[16px] leading-[20px] text-[#64748B]">
+                <div
+                  className={`md:overflow-hidden md:duration-300 ${isOpen ? "md:max-w-full" : "md:max-w-0"} flex flex-col`}
+                >
+                  <span className="truncate text-[18px] font-[400] leading-[28px] text-[#334155] md:text-[12px] md:leading-[20px]">
+                    Help Center
+                  </span>
+                  <span className="truncate text-[16px] leading-[20px] text-[#64748B] md:text-[10px] md:leading-[16px]">
                     @2024 Omnify.Inc.
                   </span>
                 </div>

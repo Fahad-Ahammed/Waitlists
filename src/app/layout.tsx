@@ -19,7 +19,7 @@ export default function RootLayout({
         <a href="#main-content" className="skip-link sr-only focus:not-sr-only">
           Skip to main content
         </a>
-        <div className="md:flex">
+        <div className="mx-auto max-w-[1440px] md:flex">
           <Sidebar />
           <main id="main-content" tabIndex={-1}>
             {children}
