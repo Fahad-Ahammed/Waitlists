@@ -1,28 +1,34 @@
 "use client";
-
-import { useState } from "react";
+import React from "react";
+import { useState, ReactElement } from "react";
 import { Poppins } from "next/font/google";
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 
 const poppins = Poppins({
   subsets: ["latin"],
   weight: ["700"],
 });
 
-// NavBar component
+// NavBar props types
 type NavBarProps = {
   isOpen: boolean;
   toggleSidebar?: () => void;
 };
 
+// Navbar Link types
+type NavLinks = {
+  title: string;
+  path: string;
+  icon: ReactElement;
+};
+
 const SideBar: React.FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(true);
-
   const toggleSidebar = (): void => {
     setIsOpen(!isOpen);
   };
-  //
   return (
     <>
       <header
@@ -156,7 +162,171 @@ const Logo: React.FC<NavBarProps> = ({ isOpen, toggleSidebar }) => {
 };
 
 const NavBar: React.FC<NavBarProps> = ({ isOpen }) => {
-  const navStyles = `flex items-center gap-x-[5px] ${isOpen ? "md:gap-x-[5px]" : "md:gap-x-0"} md:duration-300 md:ease-in-out text-[20px] font-[500] leading-[28px] text-[#334155] md:mb-0 md:text-[14px] md:leading-[20px] lg:text-[12px]`;
+  const pathName:string = usePathname();
+  const navStyles: string = `flex items-center gap-x-[5px] ${isOpen ? "md:gap-x-[5px]" : "md:gap-x-0"} md:duration-300 md:ease-in-out text-[20px] font-[500] leading-[28px] text-[#334155] md:mb-0 md:text-[14px] md:leading-[20px] lg:text-[12px] p-[15px] md:p-[8px]`;
+
+  const OrdersIcon: React.FC<NavBarProps> = ({ isOpen }) => (
+    <svg
+      className={`${isOpen ? "md:mx-[0px]" : "md:mx-[2px]"} h-[22px] w-[22px] shrink-0 md:h-[16px] md:w-[16px]`}
+      viewBox="0 0 16 16"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M14.6667 8H10.6667L9.33337 10H6.66671L5.33337 8H1.33337"
+        stroke="#334155"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M3.63337 3.40663L1.33337 7.99996V12C1.33337 12.3536 1.47385 12.6927 1.7239 12.9428C1.97395 13.1928 2.31309 13.3333 2.66671 13.3333H13.3334C13.687 13.3333 14.0261 13.1928 14.2762 12.9428C14.5262 12.6927 14.6667 12.3536 14.6667 12V7.99996L12.3667 3.40663C12.2563 3.18448 12.0862 2.99754 11.8753 2.86681C11.6645 2.73608 11.4214 2.66676 11.1734 2.66663H4.82671C4.57865 2.66676 4.33555 2.73608 4.12474 2.86681C3.91392 2.99754 3.74376 3.18448 3.63337 3.40663Z"
+        stroke="#334155"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  );
+  const SubscriptionIcon: React.FC<NavBarProps> = ({ isOpen }) => (
+    <svg
+      className={`${isOpen ? "md:mx-[0px]" : "md:mx-[2px]"} h-[22px] w-[22px] shrink-0 md:h-[16px] md:w-[16px]`}
+      viewBox="0 0 16 16"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g clip-path="url(#clip0_1_12388)">
+        <path
+          d="M11.5 5H2.5C2.22386 5 2 5.22386 2 5.5V12.5C2 12.7761 2.22386 13 2.5 13H11.5C11.7761 13 12 12.7761 12 12.5V5.5C12 5.22386 11.7761 5 11.5 5Z"
+          stroke="#334155"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M4 3H13.5C13.6326 3 13.7598 3.05268 13.8536 3.14645C13.9473 3.24021 14 3.36739 14 3.5V11"
+          stroke="#334155"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M4.6875 8.625L6.1875 10.125L9.1875 7.125"
+          stroke="#334155"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </g>
+      <defs>
+        <clipPath id="clip0_1_12388">
+          <rect width="16" height="16" fill="white" />
+        </clipPath>
+      </defs>
+    </svg>
+  );
+  const CalendarIcon: React.FC<NavBarProps> = ({ isOpen }) => (
+    <svg
+      className={`${isOpen ? "md:mx-[0px]" : "md:mx-[2px]"} h-[22px] w-[22px] shrink-0 md:h-[16px] md:w-[16px]`}
+      viewBox="0 0 16 16"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M12.6667 2.66663H3.33333C2.59695 2.66663 2 3.26358 2 3.99996V13.3333C2 14.0697 2.59695 14.6666 3.33333 14.6666H12.6667C13.403 14.6666 14 14.0697 14 13.3333V3.99996C14 3.26358 13.403 2.66663 12.6667 2.66663Z"
+        stroke="#334155"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M10.6666 1.33337V4.00004"
+        stroke="#334155"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M5.33337 1.33337V4.00004"
+        stroke="#334155"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M2 6.66663H14"
+        stroke="#334155"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M5.33337 9.33337H5.34004"
+        stroke="#334155"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M8 9.33337H8.00667"
+        stroke="#334155"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M10.6666 9.33337H10.6733"
+        stroke="#334155"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M5.33337 12H5.34004"
+        stroke="#334155"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M8 12H8.00667"
+        stroke="#334155"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M10.6666 12H10.6733"
+        stroke="#334155"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  );
+  const WaitListIcon: React.FC<NavBarProps> = ({ isOpen }) => (
+    <svg
+      className={`${isOpen ? "md:mx-[0px]" : "md:mx-[2px]"} h-[22px] w-[22px] shrink-0 md:h-[16px] md:w-[16px]`}
+      viewBox="0 0 16 16"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M3.33337 14.6667H12.6667M3.33337 1.33337H12.6667M11.3334 14.6667V11.8854C11.3333 11.5318 11.1928 11.1927 10.9427 10.9427L8.00004 8.00004M8.00004 8.00004L5.05737 10.9427C4.80731 11.1927 4.66678 11.5318 4.66671 11.8854V14.6667M8.00004 8.00004L5.05737 5.05737C4.80731 4.80738 4.66678 4.4683 4.66671 4.11471V1.33337M8.00004 8.00004L10.9427 5.05737C11.1928 4.80738 11.3333 4.4683 11.3334 4.11471V1.33337"
+        stroke="#334155"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  );
+  const navLinks: NavLinks[] = [
+    {
+      title: "Orders",
+      path: "/orders",
+      icon: <OrdersIcon isOpen={isOpen} />,
+    },
+    {
+      title: "Subscription",
+      path: "/subscriptions",
+      icon: <SubscriptionIcon isOpen={isOpen} />,
+    },
+    {
+      title: "Calendar",
+      path: "/calendar",
+      icon: <CalendarIcon isOpen={isOpen} />,
+    },
+    {
+      title: "Waitlist",
+      path: "/waitlist",
+      icon: <WaitListIcon isOpen={isOpen} />,
+    },
+  ];
+
   return (
     <>
       <nav
@@ -165,9 +335,9 @@ const NavBar: React.FC<NavBarProps> = ({ isOpen }) => {
         <div className="relative mx-auto flex h-full w-[90%] flex-col md:mx-[10px] md:h-full md:w-[unset] lg:mx-[8px]">
           <div>
             <div
-              className={`relative z-[2] rounded-[6px] bg-[#FFFFFF] shadow-md`}
+              className={`relative z-[2] rounded-[6px] bg-[#FFFFFF] p-[15px] shadow-md md:py-[8px] md:pl-[12px] md:pr-[8px]`}
             >
-              <div className="flex items-center py-[8px] pl-[12px] pr-[8px] text-[12px] font-[500] leading-[20px] text-[#334155]">
+              <div className="flex items-center text-[20px] font-[500] leading-[28px] text-[#334155] md:text-[12px] md:leading-[20px]">
                 <span
                   className={`block truncate md:overflow-hidden md:duration-300 ${isOpen ? "md:max-w-full" : "md:max-w-0"}`}
                 >
@@ -207,15 +377,15 @@ const NavBar: React.FC<NavBarProps> = ({ isOpen }) => {
               </div>
             </div>
             <div
-              className={`${isOpen ? "" : "md:top-[-25px] md:w-[29px]"} relative top-[-5px] z-[1] mx-auto mb-[25px] w-[193px] rounded-b-[6px] bg-[#F1F5F9] px-[12px] py-[6px] shadow-md md:duration-300 md:ease-in-out`}
+              className={`${isOpen ? "md:w-[193px]" : "md:top-[-25px] md:mb-[0px] md:w-[29px]"} relative top-[-5px] z-[1] mx-auto mb-[25px] w-[70%] rounded-b-[6px] bg-[#F1F5F9] px-[12px] py-[6px] shadow-md md:duration-500 md:ease-in-out`}
             >
               <div
-                className={` ${isOpen ? "md:max-w-full" : "md:max-w-0"} mb-[6px] leading-[20px] md:overflow-hidden md:truncate md:duration-300 md:ease-in-out`}
+                className={` ${isOpen ? "md:max-w-full" : "md:max-w-0"} mb-[6px] leading-[24px] md:overflow-hidden md:truncate md:leading-[20px] md:duration-300 md:ease-in-out`}
               >
-                <span className="mr-[8px] text-[16px] font-[700] text-[#334155]">
+                <span className="mr-[8px] text-[20px] font-[700] text-[#334155] md:text-[16px]">
                   08:30 AM
                 </span>
-                <span className="text-[14px] font-[500] leading-[20px] text-[#334155]">
+                <span className="text-[18px] font-[500] leading-[20px] text-[#334155] md:text-[14px]">
                   Tue 20 Jan
                 </span>
               </div>
@@ -268,189 +438,32 @@ const NavBar: React.FC<NavBarProps> = ({ isOpen }) => {
           </div>
           <div className="flex min-h-[calc(100vh-65px)] flex-grow flex-col justify-between pb-[70px] min-[600px]:flex-row md:min-h-[unset] md:flex-col md:pb-0">
             <ul>
-              <li
-                className={`${isOpen ? "md:mx-[0px]" : "md:mx-[5px]"} p-[8px] md:duration-300 md:ease-in-out`}
-              >
-                <Link href={"/orders"} className={navStyles}>
-                  <svg
-                    className="h-[22px] w-[22px] shrink-0 md:h-[16px] md:w-[16px]"
-                    viewBox="0 0 16 16"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M14.6667 8H10.6667L9.33337 10H6.66671L5.33337 8H1.33337"
-                      stroke="#334155"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                    <path
-                      d="M3.63337 3.40663L1.33337 7.99996V12C1.33337 12.3536 1.47385 12.6927 1.7239 12.9428C1.97395 13.1928 2.31309 13.3333 2.66671 13.3333H13.3334C13.687 13.3333 14.0261 13.1928 14.2762 12.9428C14.5262 12.6927 14.6667 12.3536 14.6667 12V7.99996L12.3667 3.40663C12.2563 3.18448 12.0862 2.99754 11.8753 2.86681C11.6645 2.73608 11.4214 2.66676 11.1734 2.66663H4.82671C4.57865 2.66676 4.33555 2.73608 4.12474 2.86681C3.91392 2.99754 3.74376 3.18448 3.63337 3.40663Z"
-                      stroke="#334155"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                  </svg>
-                  <span
-                    className={`truncate md:overflow-hidden md:duration-300 ${isOpen ? "md:max-w-full" : "md:max-w-0"}`}
-                  >
-                    Orders
-                  </span>
-                </Link>
-              </li>
-              <li
-                className={`${isOpen ? "md:mx-[0px]" : "md:mx-[5px]"} p-[8px] md:duration-300 md:ease-in-out`}
-              >
-                <Link href={"/subscriptions"} className={navStyles}>
-                  <svg
-                    className="h-[22px] w-[22px] shrink-0 md:h-[16px] md:w-[16px]"
-                    viewBox="0 0 16 16"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <g clip-path="url(#clip0_1_12388)">
-                      <path
-                        d="M11.5 5H2.5C2.22386 5 2 5.22386 2 5.5V12.5C2 12.7761 2.22386 13 2.5 13H11.5C11.7761 13 12 12.7761 12 12.5V5.5C12 5.22386 11.7761 5 11.5 5Z"
-                        stroke="#334155"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                      <path
-                        d="M4 3H13.5C13.6326 3 13.7598 3.05268 13.8536 3.14645C13.9473 3.24021 14 3.36739 14 3.5V11"
-                        stroke="#334155"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                      <path
-                        d="M4.6875 8.625L6.1875 10.125L9.1875 7.125"
-                        stroke="#334155"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                    </g>
-                    <defs>
-                      <clipPath id="clip0_1_12388">
-                        <rect width="16" height="16" fill="white" />
-                      </clipPath>
-                    </defs>
-                  </svg>
-                  <span
-                    className={`truncate md:overflow-hidden md:duration-300 ${isOpen ? "md:max-w-full" : "md:max-w-0"}`}
-                  >
-                    Subscription
-                  </span>
-                </Link>
-              </li>
-              <li
-                className={`${isOpen ? "md:mx-[0px]" : "md:mx-[5px]"} p-[8px] md:duration-300 md:ease-in-out`}
-              >
-                <Link href={"/calendar"} className={navStyles}>
-                  <svg
-                    className="h-[22px] w-[22px] shrink-0 md:h-[16px] md:w-[16px]"
-                    viewBox="0 0 16 16"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M12.6667 2.66663H3.33333C2.59695 2.66663 2 3.26358 2 3.99996V13.3333C2 14.0697 2.59695 14.6666 3.33333 14.6666H12.6667C13.403 14.6666 14 14.0697 14 13.3333V3.99996C14 3.26358 13.403 2.66663 12.6667 2.66663Z"
-                      stroke="#334155"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                    <path
-                      d="M10.6666 1.33337V4.00004"
-                      stroke="#334155"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                    <path
-                      d="M5.33337 1.33337V4.00004"
-                      stroke="#334155"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                    <path
-                      d="M2 6.66663H14"
-                      stroke="#334155"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                    <path
-                      d="M5.33337 9.33337H5.34004"
-                      stroke="#334155"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                    <path
-                      d="M8 9.33337H8.00667"
-                      stroke="#334155"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                    <path
-                      d="M10.6666 9.33337H10.6733"
-                      stroke="#334155"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                    <path
-                      d="M5.33337 12H5.34004"
-                      stroke="#334155"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                    <path
-                      d="M8 12H8.00667"
-                      stroke="#334155"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                    <path
-                      d="M10.6666 12H10.6733"
-                      stroke="#334155"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                  </svg>
-                  <span
-                    className={`truncate md:overflow-hidden md:duration-300 ${isOpen ? "md:max-w-full" : "md:max-w-0"}`}
-                  >
-                    Calendar
-                  </span>
-                </Link>
-              </li>
-              <li
-                className={`${isOpen ? "md:mx-[0px]" : "md:mx-[5px]"} p-[8px] md:duration-300 md:ease-in-out`}
-              >
-                <Link href={"/waitlist"} className={navStyles}>
-                  <svg
-                    className="h-[22px] w-[22px] shrink-0 md:h-[16px] md:w-[16px]"
-                    viewBox="0 0 16 16"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M3.33337 14.6667H12.6667M3.33337 1.33337H12.6667M11.3334 14.6667V11.8854C11.3333 11.5318 11.1928 11.1927 10.9427 10.9427L8.00004 8.00004M8.00004 8.00004L5.05737 10.9427C4.80731 11.1927 4.66678 11.5318 4.66671 11.8854V14.6667M8.00004 8.00004L5.05737 5.05737C4.80731 4.80738 4.66678 4.4683 4.66671 4.11471V1.33337M8.00004 8.00004L10.9427 5.05737C11.1928 4.80738 11.3333 4.4683 11.3334 4.11471V1.33337"
-                      stroke="#334155"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                  </svg>
-                  <span
-                    className={`truncate md:overflow-hidden md:duration-300 ${isOpen ? "md:max-w-full" : "md:max-w-0"}`}
-                  >
-                    Waitlist
-                  </span>
-                </Link>
-              </li>
+              {navLinks.map((element: NavLinks, index: number) => {
+                return (
+                  <React.Fragment key={index}>
+                    <li
+                      className={`${pathName === element.path ? "bg-white shadow-md" : "bg-transparent lg:hover:bg-[#E2E8F0]"} rounded-[6px] ${isOpen ? "md:mx-[0px]" : "md:mx-[5px]"} p-[8px md:duration-100 md:ease-in-out`}
+                    >
+                      <Link href={element.path} className={navStyles}>
+                        {element.icon}
+                        <span
+                          className={`truncate md:overflow-hidden md:duration-300 ${isOpen ? "md:max-w-full" : "md:max-w-0"}`}
+                        >
+                          {element.title}
+                        </span>
+                      </Link>
+                    </li>
+                  </React.Fragment>
+                );
+              })}
             </ul>
             <ul>
               <li
-                className={` ${isOpen ? "md:mx-0" : "md:mx-[5px]"} mb-[12px] p-[8px] md:duration-300 md:ease-in-out lg:mb-[8px]`}
+                className={`${pathName === "/dashboard" ? "bg-white shadow-md" : "bg-transparent lg:hover:bg-[#E2E8F0]"} rounded-[6px] ${isOpen ? "md:mx-0" : "md:mx-[5px]"} mb-[12px] md:duration-300 md:ease-in-out lg:mb-[8px]`}
               >
                 <Link className={`${navStyles}`} href={"/dashboard"}>
                   <svg
-                    className={`h-[22px] w-[22px] shrink-0 md:h-[16px] md:w-[16px]`}
+                    className={`${isOpen ? "md:mx-[0px]" : "md:mx-[2px]"} h-[22px] w-[22px] shrink-0 md:h-[16px] md:w-[16px] md:duration-300 md:ease-in-out`}
                     viewBox="0 0 16 16"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
