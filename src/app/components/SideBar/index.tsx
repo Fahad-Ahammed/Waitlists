@@ -160,16 +160,118 @@ const NavBar: React.FC<NavBarProps> = ({ isOpen }) => {
   return (
     <>
       <nav
-        className={`absolute left-0 top-[65px] flex-grow md:relative md:left-[unset] md:top-[unset] ${isOpen ? "max-md:visible max-md:translate-x-0" : "max-md:invisible max-md:translate-x-[-100%]"} w-full bg-[#F8FAFC] pt-[20px] duration-300 ease-in-out md:pt-0`}
+        className={`absolute left-0 top-[65px] grow md:relative md:left-[unset] md:top-[unset] ${isOpen ? "max-md:visible max-md:translate-x-0" : "max-md:invisible max-md:translate-x-[-100%]"} w-full bg-[#F8FAFC] pt-[20px] duration-300 ease-in-out md:pt-0`}
       >
-        <div className="mx-auto w-[90%] md:mx-[10px] md:h-full md:w-[unset] lg:mx-[8px]">
-          {/* needs to add timezone section here */}
-          <div className="flex min-h-[calc(100vh-65px)] flex-col justify-between pb-[70px] min-[600px]:flex-row md:h-full md:min-h-[unset] md:flex-col md:pb-0">
+        <div className="relative mx-auto flex h-full w-[90%] flex-col md:mx-[10px] md:h-full md:w-[unset] lg:mx-[8px]">
+          <div>
+            <div
+              className={`relative z-[2] rounded-[6px] bg-[#FFFFFF] shadow-md`}
+            >
+              <div className="flex items-center py-[8px] pl-[12px] pr-[8px] text-[12px] font-[500] leading-[20px] text-[#334155]">
+                <span
+                  className={`block truncate md:overflow-hidden md:duration-300 ${isOpen ? "md:max-w-full" : "md:max-w-0"}`}
+                >
+                  Location Name
+                </span>
+                <svg
+                  className={`${isOpen ? "" : "md:ml-[3px]"} ml-auto block h-[16px] w-[16px] shrink-0 md:duration-300 md:ease-in-out`}
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M11.3334 7.33333L14 4.66667L11.3334 2"
+                    stroke="#475569"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M14 4.66663H6"
+                    stroke="#475569"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M4.66667 14L2 11.3333L4.66667 8.66663"
+                    stroke="#475569"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M10 11.3334H2"
+                    stroke="#475569"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </div>
+            </div>
+            <div
+              className={`${isOpen ? "" : "md:top-[-25px] md:w-[29px]"} relative top-[-5px] z-[1] mx-auto mb-[25px] w-[193px] rounded-b-[6px] bg-[#F1F5F9] px-[12px] py-[6px] shadow-md md:duration-300 md:ease-in-out`}
+            >
+              <div
+                className={` ${isOpen ? "md:max-w-full" : "md:max-w-0"} mb-[6px] leading-[20px] md:overflow-hidden md:truncate md:duration-300 md:ease-in-out`}
+              >
+                <span className="mr-[8px] text-[16px] font-[700] text-[#334155]">
+                  08:30 AM
+                </span>
+                <span className="text-[14px] font-[500] leading-[20px] text-[#334155]">
+                  Tue 20 Jan
+                </span>
+              </div>
+              <div className="flex items-center">
+                <svg
+                  className={`${isOpen ? "md:mx-0" : "md:mx-[-4px]"} h-[13px] w-[13px] shrink-0 md:overflow-hidden md:duration-300 md:ease-in-out`}
+                  viewBox="0 0 14 14"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M7.00004 12.4167C9.99158 12.4167 12.4167 9.99158 12.4167 7.00004C12.4167 4.0085 9.99158 1.58337 7.00004 1.58337C4.0085 1.58337 1.58337 4.0085 1.58337 7.00004C1.58337 9.99158 4.0085 12.4167 7.00004 12.4167Z"
+                    stroke="#64748B"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M1.58337 7H12.4167"
+                    stroke="#64748B"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M7.00004 1.58337C8.3549 3.06665 9.12487 4.99156 9.16671 7.00004C9.12487 9.00852 8.3549 10.9334 7.00004 12.4167C5.64518 10.9334 4.87522 9.00852 4.83337 7.00004C4.87522 4.99156 5.64518 3.06665 7.00004 1.58337Z"
+                    stroke="#64748B"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+                <span
+                  className={`${isOpen ? "md:max-w-full" : "ml-0 md:max-w-0"} ml-[4px] text-[10px] font-[500] leading-[16px] text-[#334155] md:overflow-hidden md:truncate md:duration-300 md:ease-in-out`}
+                >
+                  UTC: +5 hours
+                </span>
+                <svg
+                  className={`${isOpen ? "md:max-w-full" : "md:max-w-0"} ml-auto h-[16px] w-[17px] md:overflow-hidden md:duration-300 md:ease-in-out`}
+                  viewBox="0 0 17 16"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M4.5 6L8.5 10L12.5 6"
+                    stroke="#334155"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </div>
+            </div>
+          </div>
+          <div className="flex min-h-[calc(100vh-65px)] flex-grow flex-col justify-between pb-[70px] min-[600px]:flex-row md:min-h-[unset] md:flex-col md:pb-0">
             <ul>
               <li
                 className={`${isOpen ? "md:mx-[0px]" : "md:mx-[5px]"} p-[8px] md:duration-300 md:ease-in-out`}
               >
-                <Link href={"#"} className={navStyles}>
+                <Link href={"/orders"} className={navStyles}>
                   <svg
                     className="h-[22px] w-[22px] shrink-0 md:h-[16px] md:w-[16px]"
                     viewBox="0 0 16 16"
@@ -199,7 +301,7 @@ const NavBar: React.FC<NavBarProps> = ({ isOpen }) => {
               <li
                 className={`${isOpen ? "md:mx-[0px]" : "md:mx-[5px]"} p-[8px] md:duration-300 md:ease-in-out`}
               >
-                <Link href={"#"} className={navStyles}>
+                <Link href={"/subscriptions"} className={navStyles}>
                   <svg
                     className="h-[22px] w-[22px] shrink-0 md:h-[16px] md:w-[16px]"
                     viewBox="0 0 16 16"
@@ -242,7 +344,7 @@ const NavBar: React.FC<NavBarProps> = ({ isOpen }) => {
               <li
                 className={`${isOpen ? "md:mx-[0px]" : "md:mx-[5px]"} p-[8px] md:duration-300 md:ease-in-out`}
               >
-                <Link href={""} className={navStyles}>
+                <Link href={"/calendar"} className={navStyles}>
                   <svg
                     className="h-[22px] w-[22px] shrink-0 md:h-[16px] md:w-[16px]"
                     viewBox="0 0 16 16"
@@ -320,7 +422,7 @@ const NavBar: React.FC<NavBarProps> = ({ isOpen }) => {
               <li
                 className={`${isOpen ? "md:mx-[0px]" : "md:mx-[5px]"} p-[8px] md:duration-300 md:ease-in-out`}
               >
-                <Link href={"#"} className={navStyles}>
+                <Link href={"/waitlist"} className={navStyles}>
                   <svg
                     className="h-[22px] w-[22px] shrink-0 md:h-[16px] md:w-[16px]"
                     viewBox="0 0 16 16"
@@ -346,7 +448,7 @@ const NavBar: React.FC<NavBarProps> = ({ isOpen }) => {
               <li
                 className={` ${isOpen ? "md:mx-0" : "md:mx-[5px]"} mb-[12px] p-[8px] md:duration-300 md:ease-in-out lg:mb-[8px]`}
               >
-                <Link className={`${navStyles}`} href={"#"}>
+                <Link className={`${navStyles}`} href={"/dashboard"}>
                   <svg
                     className={`h-[22px] w-[22px] shrink-0 md:h-[16px] md:w-[16px]`}
                     viewBox="0 0 16 16"
@@ -411,7 +513,7 @@ const NavBar: React.FC<NavBarProps> = ({ isOpen }) => {
                 </Link>
               </li>
               <li
-                className={`mb-[12px] rounded-[6px] bg-white shadow-sm lg:mb-[8px]`}
+                className={`mb-[12px] rounded-[6px] bg-white shadow-md lg:mb-[8px]`}
               >
                 <button
                   aria-expanded="false"
