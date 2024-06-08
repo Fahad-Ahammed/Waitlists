@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
 import "./globals.css";
+import Sidebar from "./components/SideBar";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -14,7 +15,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={GeistSans.className}>{children}</body>
+      <body className={GeistSans.className}>
+        <a href="#main-content" className="skip-link sr-only focus:not-sr-only">
+          Skip to main content
+        </a>
+        <div className="md:flex">
+          <Sidebar />
+          <main id="main-content" tabIndex={-1}>
+            {children}
+          </main>
+        </div>
+      </body>
     </html>
   );
 }

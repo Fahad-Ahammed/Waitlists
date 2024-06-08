@@ -1,4 +1,4 @@
 const Home = () => {
-  return <main className="">Hello waitlist</main>;
+  return <section id="#main-content" className=" pt-[65px] md:pt-0 flex-grow bg-red-900">Hello waitlist</section>;
 };
 export default Home;
