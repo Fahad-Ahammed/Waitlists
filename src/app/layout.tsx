@@ -21,7 +21,7 @@ export default function RootLayout({
         </a>
         <div className="mx-auto max-w-[1440px] md:flex">
           <Sidebar />
-          <main id="main-content" className="grow" tabIndex={-1}>
+          <main id="main-content" className="grow overflow-hidden pt-[65px] md:pt-0" tabIndex={-1}>
             {children}
           </main>
         </div>
