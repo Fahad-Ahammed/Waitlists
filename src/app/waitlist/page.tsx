@@ -1,9 +1,12 @@
-import React from 'react'
+import React from "react";
+import Waitlist from "../templates/waitlist";
 
-const Waitlist = () => {
+const Index = () => {
   return (
-    <div>Waitlist page </div>
-  )
-}
+    <div>
+      <Waitlist />
+    </div>
+  );
+};
 
-export default Waitlist
+export default Index;
