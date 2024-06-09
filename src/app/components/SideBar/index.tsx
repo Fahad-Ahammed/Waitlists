@@ -25,14 +25,14 @@ type NavLinks = {
 };
 
 const SideBar: React.FC = () => {
-  const [isOpen, setIsOpen] = useState<boolean>(true);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const toggleSidebar = (): void => {
     setIsOpen(!isOpen);
   };
   return (
     <>
       <header
-        className={`absolute left-0 top-0 h-[65px] w-full bg-[#F8FAFC] ${isOpen ? "border-b" : ""} py-[15px] duration-[500ms] ease-in-out md:relative md:left-[unset] md:top-[unset] md:flex md:h-screen md:flex-col md:border-none md:pb-[8px] md:pt-[12px] ${isOpen ? "md:w-[230px]" : "md:w-[64px]"} `}
+        className={`absolute left-0 z-[10] top-0 h-[65px] w-full bg-[#F8FAFC] ${isOpen ? "border-b" : ""} py-[15px] duration-[500ms] ease-in-out md:relative md:left-[unset] md:top-[unset] md:flex md:h-screen md:flex-col md:border-none md:pb-[8px] md:pt-[12px] ${isOpen ? "md:min-w-[230px] md:max-w-[230px]" : "md:min-w-[64px] md:max-w-[64px] "} `}
       >
         <div className="max-md:mx-auto max-md:w-[90%] md:mx-[10px] md:mb-[15px] md:py-[10px] lg:mx-[8px] lg:mb-[12px] lg:py-[8px]">
           <div className="flex items-center gap-x-[4px] lg:gap-x-[8px]">
@@ -64,9 +64,7 @@ const SideBar: React.FC = () => {
             {/* hamburger end*/}
             <svg
               onClick={toggleSidebar}
-              className={`${isOpen ? "md:block" : "md:hidden"} ml-auto hidden shrink-0 cursor-pointer`}
-              width="16"
-              height="16"
+              className={`${isOpen ? "md:w-[16px] md:h-[16px]" : "md:w-0 md:h-0"} md:duration-300 md:ease-in-out ml-auto hidden md:block shrink-0 cursor-pointer`}
               viewBox="0 0 16 16"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -377,7 +375,7 @@ const NavBar: React.FC<NavBarProps> = ({ isOpen }) => {
               </div>
             </div>
             <div
-              className={`${isOpen ? "md:w-[193px]" : "md:top-[-25px] md:mb-[0px] md:w-[29px]"} relative top-[-5px] z-[1] mx-auto mb-[25px] w-[70%] rounded-b-[6px] bg-[#F1F5F9] px-[12px] py-[6px] shadow-md md:duration-500 md:ease-in-out`}
+              className={`${isOpen ? "md:w-[193px]" : "md:translate-y-[-25px] md:mb-[0px] md:w-[29px]"} relative translate-y-[-5px] z-[1] mx-auto mb-[25px] w-[70%] rounded-b-[6px] bg-[#F1F5F9] px-[12px] py-[6px] shadow-md md:duration-500 md:ease-in-out`}
             >
               <div
                 className={` ${isOpen ? "md:max-w-full" : "md:max-w-0"} mb-[6px] leading-[24px] md:overflow-hidden md:truncate md:leading-[20px] md:duration-300 md:ease-in-out`}
