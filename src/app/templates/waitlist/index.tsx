@@ -438,154 +438,163 @@ const Waitlist = () => {
         {/* table ends */}
 
         {tableData.length > 0 && (
-          <ul className="m-auto items-center justify-between pr-[40px] md:flex md:max-w-[1170px]">
-            <li>
-              <ul className="flex max-w-[210px] items-center gap-[2px]">
-                <li>
-                  <span className="text-[14px] leading-[20px] text-[#64748B]">
-                    Displaying
-                  </span>
-                </li>
-                <li className="flex items-center justify-center gap-[6px] rounded-[6px] bg-[#F8FAFC] px-[12px] py-[4px]">
-                  <div className="max-h-[24px flex items-center">
-                    <input
-                      className="h-[24px] w-[24px] appearance-none bg-transparent p-[2px] text-[14px] leading-[24px] text-[#334155] outline-none"
-                      type="number"
-                      id="quantity"
-                      name="quantity"
-                      maxLength={1}
-                      value={tableLimit}
-                      onChange={(e) => handleInput(e)}
-                      aria-label="Number of rows to display"
-                    />
-                    <label className="sr-only" htmlFor="quantity">
-                      Quanitity
-                    </label>
-                  </div>
-                  <div className="flex flex-col gap-y-[4px]">
-                    <button
-                      onClick={increment}
-                      aria-label="Increase table limit"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="8"
-                        height="5"
-                        viewBox="0 0 8 5"
-                        fill="none"
-                        aria-hidden="true"
-                      >
-                        <path
-                          d="M0.666626 4.00008L3.99996 0.666748L7.33329 4.00008"
-                          stroke="#334155"
-                          strokeWidth="0.666667"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    </button>
-                    <button
-                      onClick={decrement}
-                      aria-label="Decrease table limit"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="8"
-                        height="5"
-                        viewBox="0 0 8 5"
-                        fill="none"
-                        aria-hidden="true"
-                      >
-                        <path
-                          d="M0.666626 1L3.99996 4.33333L7.33329 1"
-                          stroke="#334155"
-                          strokeWidth="0.666667"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    </button>
-                  </div>
-                </li>
-                <li className="text-[14px] font-[500] leading-[20px] text-[#64748B]">
-                  out of{" "}
-                  <span className="text-[#171B1F]">{clients.length}</span>
-                </li>
-              </ul>
-            </li>
-            <li>
-              <ul className="bg-green400 flex items-center gap-x-2 px-[8px] py-[6px]">
-                <li
-                  onClick={() => {
-                    setCurrentPage(currentPage - 1);
-                    dataGenerator(currentPage - 1, tableLimit);
-                  }}
-                  className={`${currentPage == 1 ? "pointer-events-none" : "pointer-events-auto"} flex cursor-pointer items-center gap-x-[8px]`}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 16 16"
-                    fill="none"
+          <div className="bg-red- mx-auto items-center justify-between md:flex md:max-w-[1170px] md:pr-[40px]">
+            <div className="mb-[20px] flex items-center gap-x-[10px] md:mb-0 md:max-w-[210px] md:gap-x-[2px]">
+              <span className="text-[14px] leading-[20px] text-[#64748B]">
+                Displaying
+              </span>
+              <div className="flex items-center justify-center gap-[6px] rounded-[6px] bg-[#F8FAFC] px-[12px] py-[4px]">
+                <div className="flex items-center gap-x-[10px] md:gap-x-0">
+                  <button
+                    className="h-[30px] px-[6px] md:hidden"
+                    onClick={decrement}
+                    aria-label="Decrease table limit"
                   >
-                    <path
-                      d="M10 12L6 8L10 4"
-                      stroke="#334155"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                  <span className="text-[12px] leading-[20px] text-[#334155]">
-                    Previous
-                  </span>
-                </li>
-                <li>
-                  <div className="flex items-center gap-x-[2px] text-[12px] font-[500] leading-[20px] text-[#334155]">
-                    {pageNumbers.map((page, index: number) => {
-                      return (
-                        <button
-                          onClick={() => {
-                            setCurrentPage(page);
-                            dataGenerator(page, tableLimit);
-                          }}
-                          key={index}
-                          className={`${currentPage == page ? "rounded-[6px] border border-[#E2E8F0] bg-[#FFFFFF]" : ""} cursor-pointer rounded-[6px] px-[12px] py-[6px] text-center`}
-                        >
-                          {page}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </li>
-                <li
-                  onClick={() => {
-                    setCurrentPage(currentPage + 1);
-                    dataGenerator(currentPage + 1, tableLimit);
-                  }}
-                  className={`${(currentPage - 1) * tableLimit + tableData.length == clients.length ? "pointer-events-none" : "pointer-events-auto"} flex items-center gap-x-[8px]`}
-                >
-                  <span className="cursor-pointer text-[12px] leading-[20px] text-[#334155]">
-                    Next
-                  </span>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 16 16"
-                    fill="none"
+                    <span className={`block h-[2px] w-[10px] bg-black`}></span>
+                  </button>
+                  <input
+                    className="h-[24px] w-[24px] appearance-none bg-transparent p-[2px] text-[14px] leading-[24px] text-[#334155] outline-none md:h-[24px] md:w-[24px]"
+                    type="number"
+                    id="quantity"
+                    name="quantity"
+                    maxLength={1}
+                    value={tableLimit}
+                    onChange={(e) => handleInput(e)}
+                    aria-label="Number of rows to display"
+                  />
+                  <label className="sr-only" htmlFor="quantity">
+                    Quanitity
+                  </label>
+                  <button
+                    className="h-[30px] px-[6px] md:hidden"
+                    onClick={increment}
+                    aria-label="Increase table limit"
                   >
-                    <path
-                      d="M6 12L10 8L6 4"
-                      stroke="#334155"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </li>
-              </ul>
-            </li>
-          </ul>
+                    <span className={`block h-[2px] w-[10px] bg-black`}></span>
+                    <span
+                      className={`block h-[2px] w-[10px] translate-y-[-2px] rotate-90 bg-black`}
+                    ></span>
+                  </button>
+                </div>
+                <div className="hidden flex-col gap-y-[4px] md:flex">
+                  <button onClick={increment} aria-label="Increase table limit">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="8"
+                      height="5"
+                      viewBox="0 0 8 5"
+                      fill="none"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="M0.666626 4.00008L3.99996 0.666748L7.33329 4.00008"
+                        stroke="#334155"
+                        strokeWidth="0.666667"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </button>
+                  <button onClick={decrement} aria-label="Decrease table limit">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="8"
+                      height="5"
+                      viewBox="0 0 8 5"
+                      fill="none"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="M0.666626 1L3.99996 4.33333L7.33329 1"
+                        stroke="#334155"
+                        strokeWidth="0.666667"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <div className="text-[14px] font-[500] leading-[20px] text-[#64748B]">
+                out of <span className="text-[#171B1F]">{clients.length}</span>
+              </div>
+            </div>
+            <div className="flex items-center gap-x-2 py-[6px] md:px-[8px]">
+              <button
+                onClick={() => {
+                  setCurrentPage(currentPage - 1);
+                  dataGenerator(currentPage - 1, tableLimit);
+                }}
+                disabled={currentPage == 1}
+                className={`ml-auto flex md:ml-[unset] ${currentPage != 1 ? "cursor-pointer" : ""} items-center gap-x-[8px]`}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                >
+                  <path
+                    d="M10 12L6 8L10 4"
+                    stroke="#334155"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+                <span className="text-[12px] leading-[20px] text-[#334155]">
+                  Previous
+                </span>
+              </button>
+              <div>
+                <div className="flex items-center gap-x-[2px] text-[12px] font-[500] leading-[20px] text-[#334155]">
+                  {pageNumbers.map((page, index: number) => {
+                    return (
+                      <button
+                        onClick={() => {
+                          setCurrentPage(page);
+                          dataGenerator(page, tableLimit);
+                        }}
+                        key={index}
+                        className={`${currentPage == page ? "rounded-[6px] border border-[#E2E8F0] bg-[#FFFFFF]" : ""} cursor-pointer rounded-[6px] px-[12px] py-[6px] text-center`}
+                      >
+                        {page}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+              <button
+                onClick={() => {
+                  setCurrentPage(currentPage + 1);
+                  dataGenerator(currentPage + 1, tableLimit);
+                }}
+                disabled={
+                  (currentPage - 1) * tableLimit + tableData.length ==
+                  clients.length
+                }
+                className={`${(currentPage - 1) * tableLimit + tableData.length == clients.length ? "" : "cursor-pointer"} flex items-center gap-x-[8px]`}
+              >
+                <span className="cursor-pointer text-[12px] leading-[20px] text-[#334155]">
+                  Next
+                </span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                >
+                  <path
+                    d="M6 12L10 8L6 4"
+                    stroke="#334155"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
         )}
       </div>
     </div>
