@@ -103,7 +103,7 @@ const Logo: React.FC<NavBarProps> = ({ isOpen, toggleSidebar }) => {
             toggleSidebar();
           }
         }}
-        className={`${isOpen ? "md:ml-0" : "md:ml-[11px]"} h-[32px] w-[32px] shrink-0 cursor-pointer md:h-[22px] md:w-[22px] md:duration-300 md:ease-in-out`}
+        className={`${isOpen ? "md:ml-[8px]" : "md:ml-[11px]"} h-[32px] w-[32px] shrink-0 cursor-pointer md:h-[22px] md:w-[22px] md:duration-200 md:ease-in-out`}
         viewBox="0 0 22 22"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
