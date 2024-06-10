@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
 import "./globals.css";
 import Sidebar from "./components/SideBar";
+import ReduxProvider from "@/redux/provider";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -19,12 +20,18 @@ export default function RootLayout({
         <a href="#main-content" className="skip-link sr-only focus:not-sr-only">
           Skip to main content
         </a>
-        <div className="mx-auto max-w-[1440px] md:flex">
-          <Sidebar />
-          <main id="main-content" className="md:grow overflow-hidden pt-[65px] md:pt-0" tabIndex={-1}>
-            {children}
-          </main>
-        </div>
+        <ReduxProvider>
+          <div className="mx-auto max-w-[1440px] md:flex">
+            <Sidebar />
+            <main
+              id="main-content"
+              className="overflow-hidden pt-[65px] md:grow md:pt-0"
+              tabIndex={-1}
+            >
+              {children}
+            </main>
+          </div>
+        </ReduxProvider>
       </body>
     </html>
   );
