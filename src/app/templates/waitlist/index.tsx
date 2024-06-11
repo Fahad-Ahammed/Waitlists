@@ -30,7 +30,7 @@ const Waitlist = () => {
         {/* Tab filter section start */}
         <nav
           aria-label="Filter options"
-          className="mb-[30px] xl:mb-[16px] sm:w-[90%] xl:w-[1108px]"
+          className="mb-[30px] xl:mb-[16px] sm:w-[90%] xl:w-[1108px] lg:max-w-full "
         >
           <ul
             role="tablist"

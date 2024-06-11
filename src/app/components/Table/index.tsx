@@ -6,7 +6,7 @@ import { RootState, AppDispatch } from "@/redux/store";
 import { ClientType } from "@/lib/data";
 import { setCurrentPage } from "@/redux/waitlist/clientSlice";
 
-const Table = ({}: any) => {
+const Table = () => {
   const { filteredWaitlist, currentPage } = useSelector(
     (state: RootState) => state.waitlist,
   );
@@ -77,7 +77,7 @@ const Table = ({}: any) => {
       {limitedTableData.length > 0 && (
         <>
           {/* table start */}
-          <div className="md:mx-auo relative mb-[12px] max-h-[500px] overflow-auto rounded-lg border md:max-w-[1350px]">
+          <div className="md:mx-auo relative mb-[12px] max-h-[400px] overflow-auto rounded-lg border md:max-w-[1350px] lg:max-h-[500px]">
             <table className="relative w-[900px] table-fixed text-left xl:w-full">
               <thead className="sticky top-0 z-[4] border-b bg-[#F8FAFC] py-[8px] text-[12px] capitalize leading-[20px] text-[#64748B]">
                 <tr role="row">
@@ -446,7 +446,7 @@ const Table = ({}: any) => {
 
           {/* pagination section start */}
           <div className="items-center justify-between md:flex md:max-w-[1350px] md:pr-[40px]">
-            <div className="mb-[20px] flex items-center gap-x-[10px] md:mb-0 md:max-w-[210px] md:gap-x-[2px] md:py-[12px]">
+            <div className="mb-[20px] flex items-center gap-x-[10px] md:mb-0 md:max-w-[210px] md:gap-x-[2px]">
               <span className="text-[14px] leading-[20px] text-[#64748B]">
                 Displaying
               </span>

@@ -16,7 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={GeistSans.className}>
+      <body className={`md:overflow-hidden ${GeistSans.className}`}>
         <a href="#main-content" className="skip-link sr-only focus:not-sr-only">
           Skip to main content
         </a>
@@ -25,7 +25,7 @@ export default function RootLayout({
             <Sidebar />
             <main
               id="main-content"
-              className="overflow-hidden pt-[65px] md:grow md:pt-0"
+              className="overflow-hidden pt-[65px] md:pt-0"
               tabIndex={-1}
             >
               {children}
