@@ -64,7 +64,7 @@ const clientSlice = createSlice({
         state.filteredWaitlist = [...data];
         state.currentTabSlug = slug;
       }
-      state.currentPage=1;
+      state.currentPage = 1;
     },
     setCurrentPage: (state, action: PayloadAction<number>) => {
       state.currentPage = action.payload;
@@ -72,6 +72,6 @@ const clientSlice = createSlice({
   },
 });
 
-export const { setCurrentTabList,setCurrentPage } = clientSlice.actions;
+export const { setCurrentTabList, setCurrentPage } = clientSlice.actions;
 
 export default clientSlice.reducer;

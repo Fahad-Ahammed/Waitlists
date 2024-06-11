@@ -6,8 +6,8 @@ import { RootState, AppDispatch } from "@/redux/store";
 import { ClientType } from "@/lib/data";
 import { setCurrentPage } from "@/redux/waitlist/clientSlice";
 
-const Table = ({}:any) => {
-  const { filteredWaitlist,currentPage } = useSelector(
+const Table = ({}: any) => {
+  const { filteredWaitlist, currentPage } = useSelector(
     (state: RootState) => state.waitlist,
   );
   const dispatch = useDispatch<AppDispatch>();
@@ -51,7 +51,7 @@ const Table = ({}:any) => {
   }, [currentPage, tableLimit, filteredWaitlist.length]);
 
   const incrementPage = () => {
-    dispatch(setCurrentPage(1))
+    dispatch(setCurrentPage(1));
     setLimit(Math.min(filteredWaitlist.length, limitedTableData.length + 1));
   };
 
@@ -482,7 +482,10 @@ const Table = ({}:any) => {
                   </button>
                 </div>
                 <div className="hidden flex-col gap-y-[4px] md:flex">
-                  <button onClick={incrementPage} aria-label="Increase table limit">
+                  <button
+                    onClick={incrementPage}
+                    aria-label="Increase table limit"
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="8"
@@ -500,7 +503,10 @@ const Table = ({}:any) => {
                       />
                     </svg>
                   </button>
-                  <button onClick={decrementPage} aria-label="Decrease table limit">
+                  <button
+                    onClick={decrementPage}
+                    aria-label="Decrease table limit"
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="8"
