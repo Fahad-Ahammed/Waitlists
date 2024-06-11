@@ -1,9 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
-import clientReducer from "./waitlist/clientSlice";
+import waitlistReducer from "./waitlist/clientSlice";
 
 export const store = configureStore({
   reducer: {
-    client: clientReducer,
+    waitlist: waitlistReducer,
   },
 });
 
