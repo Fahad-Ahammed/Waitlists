@@ -8,7 +8,7 @@ type InitialState = {
   currentTabSlug: TabSlug;
   filteredWaitlist: ClientType[];
   currentPage: number;
-  searchClient:string;
+  searchClient: string;
 };
 export type TabSlug = "allWaitlists" | "newlyAdded" | "leads";
 export type Tab = {
@@ -40,12 +40,19 @@ const getClientsByTab = (slug: TabSlug): ClientType[] => {
 };
 
 // function to filter clients based on search query
-const filterClientsBySearch = (clients: ClientType[], query: string) => {
+const filterClientsBySearch = (
+  clients: ClientType[],
+  query: string,
+): ClientType[] => {
   if (!query) return clients;
-  return clients.filter(client =>
-    client.payer.toLowerCase().includes(query.toLowerCase()) ||
-    client.email.toLowerCase().includes(query.toLowerCase())
+
+  const filteredClients = clients.filter(
+    (client) =>
+      client.payer.toLowerCase().includes(query.toLowerCase()) ||
+      client.email.toLowerCase().includes(query.toLowerCase()),
   );
+
+  return filteredClients.length ? filteredClients : clients;
 };
 
 const initialState: InitialState = {
@@ -69,31 +76,38 @@ const initialState: InitialState = {
   currentTabSlug: "allWaitlists",
   filteredWaitlist: [...data], // Initially loading with all waitlists because default tab section is set to All waitlists
   currentPage: 1,
-  searchClient:"",
+  searchClient: "",
 };
 
 const clientSlice = createSlice({
   name: "waitlist",
   initialState,
   reducers: {
+    // Tab filter section
     setCurrentTabList: (state, action: PayloadAction<TabSlug>) => {
       const { payload: slug } = action;
       state.currentTabSlug = slug;
       const clients = getClientsByTab(slug);
-      state.filteredWaitlist = filterClientsBySearch(clients, "");``
+      state.filteredWaitlist = filterClientsBySearch(clients, "");
       state.currentPage = 1;
     },
+    // Table pagination page setting
     setCurrentPage: (state, action: PayloadAction<number>) => {
       state.currentPage = action.payload;
     },
+    // Search by client filter
     setSearchClient: (state, action: PayloadAction<string>) => {
       state.searchClient = action.payload;
       const clients = getClientsByTab(state.currentTabSlug);
-      state.filteredWaitlist = filterClientsBySearch(clients, state.searchClient);
+      state.filteredWaitlist = filterClientsBySearch(
+        clients,
+        state.searchClient,
+      );
     },
   },
 });
 
-export const { setCurrentTabList, setCurrentPage,setSearchClient } = clientSlice.actions;
+export const { setCurrentTabList, setCurrentPage, setSearchClient } =
+  clientSlice.actions;
 
 export default clientSlice.reducer;

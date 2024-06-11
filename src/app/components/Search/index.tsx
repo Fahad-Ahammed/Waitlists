@@ -1,27 +1,34 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 
-interface SearchBarProps {
+type SearchBarProps = {
   onSearch: (query: string) => void;
-}
+};
 
 const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
-  const [query, setQuery] = useState("");
+  const { currentTabSlug } = useSelector((state: RootState) => state.waitlist);
 
+  const [query, setQuery] = useState("");
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(event.target.value);
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    onSearch && onSearch(query);
+    onSearch(query);
   };
+
+  useEffect(() => {
+    setQuery("");
+  }, [currentTabSlug]);
 
   return (
     <form
       onSubmit={handleSubmit}
       role="search"
       aria-label="Search clients"
-      className="relative px-[35px] py-[5px] bg-white shadow-md rounded-sm"
+      className="relative rounded-sm bg-white px-[35px] py-[5px] shadow-md"
     >
       <div className="pointer-events-none absolute inset-y-0 left-[16px] flex items-center pr-3">
         <svg
@@ -48,7 +55,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
         value={query}
         onChange={handleChange}
         placeholder="Search Clients"
-        className="w-full text-[12px] leading-[20px] font-[500] text-[#374151] placeholder:text-[#94A3B8] outline-none  "
+        className="w-full text-[12px] font-[500] leading-[20px] text-[#374151] outline-none placeholder:text-[#94A3B8]"
       />
     </form>
   );
