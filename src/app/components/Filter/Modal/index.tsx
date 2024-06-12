@@ -3,13 +3,22 @@ import ScheduledDate from "../ScheduledDate";
 import People from "../People";
 import ServicesProducts from "../ServicesProducts";
 import SidePanel from "../Modal/SidePanel";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState, AppDispatch } from "@/redux/store";
+import { applyFilter } from "@/redux/waitlist/clientSlice";
 
-const Modal = ({ isModalOpen }: { isModalOpen: boolean }) => {
+const Modal = ({
+  isModalOpen,
+  setModalOpen,
+}: {
+  isModalOpen: boolean;
+  setModalOpen: any;
+}) => {
   const [selectedTab, setSelectedTab] = useState("Scheduled Date");
-
+  const dispatch = useDispatch<AppDispatch>();
   return (
     <div
-      className={`${isModalOpen ? "pointer-events-auto visible translate-y-[5px] opacity-100" : "pointer-events-none invisible translate-y-[-10px] opacity-0"} absolute left-0 top-[100%] z-10 rounded-[6px] border duration-300 xl:duration-200 ease-in-out xl:h-[400px] xl:w-[612px] xl:flex-[unset] xl:bg-[unset]`}
+      className={`${isModalOpen ? "pointer-events-auto visible translate-y-[5px] opacity-100" : "pointer-events-none invisible translate-y-[-10px] opacity-0"} absolute left-0 top-[100%] z-10 rounded-[6px] border duration-300 ease-in-out xl:h-[400px] xl:w-[612px] xl:flex-[unset] xl:bg-[unset] xl:duration-200`}
       role="dialog"
       aria-modal="true"
       aria-labelledby="filter-dialog-title"
@@ -27,7 +36,13 @@ const Modal = ({ isModalOpen }: { isModalOpen: boolean }) => {
           <button className="rounded-md bg-[#F4F4F5] px-[16px] py-[6px] text-[#09090B]">
             Reset to Default
           </button>
-          <button className="rounded-md bg-black px-[16px] py-[6px] text-white">
+          <button
+            onClick={() => {
+              dispatch(applyFilter());
+              setModalOpen(!isModalOpen);
+            }}
+            className="rounded-md bg-black px-[16px] py-[6px] text-white"
+          >
             Apply
           </button>
         </div>

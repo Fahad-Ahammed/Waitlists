@@ -174,7 +174,7 @@ const Waitlist = () => {
                 </svg>
               </div>
             </div>
-            {<Modal isModalOpen={isModalOpen} />}
+            {<Modal isModalOpen={isModalOpen} setModalOpen={setModalOpen} />}
           </div>
         </div>
         {/* Custom filter section end */}
