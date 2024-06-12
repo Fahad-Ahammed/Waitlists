@@ -1,6 +1,6 @@
 "use client";
 
-import React,{useState} from "react";
+import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "@/redux/store";
 import {
@@ -10,7 +10,7 @@ import {
 } from "@/redux/waitlist/clientSlice";
 import Table from "@/app/components/Table";
 import Search from "@/app/components/Search";
-import Modal from "@/app/components/Filter/Modal"
+import Modal from "@/app/components/Filter/Modal";
 
 const Waitlist = () => {
   const { waitlistTabs, currentTabSlug } = useSelector(
@@ -21,7 +21,7 @@ const Waitlist = () => {
   const handleSearch = (query: string) => {
     dispatch(setSearchClient(query));
   };
-  const [isModalOpen, setModalOpen] = useState(true);
+  const [isModalOpen, setModalOpen] = useState(false);
 
   return (
     <div className="overflow-auto bg-[#F8FAFC] max-md:mx-auto max-md:w-[90%] md:h-screen md:px-[8px] md:pb-[24px] md:pt-[8px]">
@@ -33,7 +33,7 @@ const Waitlist = () => {
         {/* Tab filter section start */}
         <nav
           aria-label="Filter options"
-          className="mb-[30px] xl:mb-[16px] sm:w-[90%] xl:w-[1108px] lg:max-w-full "
+          className="mb-[30px] sm:w-[90%] lg:max-w-full xl:mb-[16px] xl:w-[1108px]"
         >
           <ul
             role="tablist"
@@ -72,11 +72,11 @@ const Waitlist = () => {
 
         {/* Custom filter section start */}
         <div className="mb-[24px]">
-          <div className="flex items-center relative">
+          <div className="relative flex items-center">
             <button
-            onClick={() => setModalOpen(true)}
+              onClick={() => setModalOpen(!isModalOpen)}
               aria-label="Add filter"
-              className="flex items-center gap-x-[6px] mr-[5px] rounded-[6px] bg-[#F1F5F9] px-[12px] py-[8px]"
+              className="relative mr-[5px] flex items-center gap-x-[6px] rounded-[6px] bg-[#F1F5F9] px-[12px] py-[8px]"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -174,7 +174,7 @@ const Waitlist = () => {
                 </svg>
               </div>
             </div>
-            {isModalOpen && <Modal />}
+            {<Modal isModalOpen={isModalOpen} />}
           </div>
         </div>
         {/* Custom filter section end */}
