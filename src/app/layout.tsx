@@ -25,7 +25,7 @@ export default function RootLayout({
             <Sidebar />
             <main
               id="main-content"
-              className="overflow-hidden pt-[65px] md:pt-0"
+              className="overflow-hidden grow pt-[65px] md:pt-0"
               tabIndex={-1}
             >
               {children}

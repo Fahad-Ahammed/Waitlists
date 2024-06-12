@@ -32,7 +32,7 @@ const SideBar: React.FC = () => {
   return (
     <>
       <header
-        className={`absolute left-0 z-[10] top-0 h-[65px] w-full bg-[#F8FAFC] ${isOpen ? "border-b" : "max-md:overflow-hidden"} py-[15px] duration-[500ms] ease-in-out md:relative md:left-[unset] md:top-[unset] md:flex md:h-screen md:flex-col md:border-none md:pb-[8px] md:pt-[12px] ${isOpen ? "md:min-w-[230px] md:max-w-[230px]" : "md:min-w-[64px] md:max-w-[64px] "} `}
+        className={`absolute left-0 z-[20] top-0 h-[65px] w-full bg-[#F8FAFC] ${isOpen ? "border-b" : "max-md:overflow-hidden"} py-[15px] duration-[500ms] ease-in-out md:relative md:left-[unset] md:top-[unset] md:flex md:h-screen md:flex-col md:border-none md:pb-[8px] md:pt-[12px] ${isOpen ? "md:min-w-[230px] md:max-w-[230px]" : "md:min-w-[64px] md:max-w-[64px] "} `}
       >
         <div className="max-md:mx-auto max-md:w-[90%] md:mx-[10px] md:mb-[15px] md:py-[10px] lg:mx-[8px] lg:mb-[12px] lg:py-[8px]">
           <div className="flex items-center gap-x-[4px] lg:gap-x-[8px]">
