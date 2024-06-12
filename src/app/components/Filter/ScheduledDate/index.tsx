@@ -1,57 +1,60 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { format } from "date-fns";
 import "react-day-picker/dist/style.css";
 import { CaptionProps, DayPicker, useNavigation } from "react-day-picker";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState, AppDispatch } from "@/redux/store";
+import { setSelectedDuration } from "@/redux/waitlist/clientSlice";
 
 type Duration = {
   label: string;
   title: string;
-  value: number|null;
 };
 
 const ScheduledDate = () => {
   const [selectedDuration, setDuration] = useState<Duration>({
     title: "All time",
     label: "all",
-    value: null,
   });
+  const { currentTabSlug } = useSelector((state: RootState) => state.waitlist);
   const [isDropDownOpen, setDropDown] = useState<boolean>(false);
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    setDuration({
+      title: "All time",
+      label: "all",
+    });
+  }, [currentTabSlug]);
 
   const duration: Duration[] = [
     {
       label: "all",
       title: "All time",
-      value: null,
     },
     {
       label: "custom",
       title: "Custom",
-      value: null,
     },
     {
-      label: " last30Days",
+      label: "last30Days",
       title: "Last 30 days",
-      value: 30,
     },
     {
       label: "thisMonth",
       title: "This month",
-      value: null,
     },
     {
       label: "lastMonth",
       title: "Last month",
-      value: null,
     },
     {
       label: "thisQuarter",
       title: "This quarter",
-      value: null,
     },
     {
       label: "2quarterAgo",
       title: "2 quarter ago",
-      value: null,
     },
   ];
 
@@ -62,7 +65,7 @@ const ScheduledDate = () => {
         role="tabpanel"
         aria-labelledby="tab-button-scheduled-date"
       >
-        <div className="relative">
+        <div className="relative z-[6]">
           <button
             onClick={() => setDropDown(!isDropDownOpen)}
             id="schedule-date-button"
@@ -88,7 +91,7 @@ const ScheduledDate = () => {
           </button>
           <div
             id="dropdown-states"
-            className={`${isDropDownOpen ? "visible translate-y-[5px] opacity-100" : "pointer-events-none invisible translate-y-[-10px] opacity-0"} absolute left-0 top-[100%] z-[6] h-[200px] w-full overflow-scroll rounded-[6px] border border-[#E4E4E7] bg-white p-[4px] shadow-sm duration-[150ms] ease-in-out sm:h-[232px]`}
+            className={`${isDropDownOpen ? "visible translate-y-[5px] opacity-100" : "pointer-events-none invisible translate-y-[-10px] opacity-0"} absolute left-0 top-[100%] h-[200px] w-full overflow-scroll rounded-[6px] border border-[#E4E4E7] bg-white p-[4px] shadow-sm duration-[150ms] ease-in-out sm:h-[232px]`}
           >
             <ul aria-labelledby="schedule-date-button">
               {duration.map((duration: Duration, index: number) => {
@@ -96,7 +99,9 @@ const ScheduledDate = () => {
                   <li
                     onClick={() => {
                       setDuration(duration);
-                      duration.label !== selectedDuration.label &&
+                      if (duration.label !== "custom")
+                        dispatch(setSelectedDuration(duration.label));
+                      duration.label !== selectedDuration?.label &&
                         setDropDown(false);
                     }}
                     key={index}
@@ -104,7 +109,7 @@ const ScheduledDate = () => {
                     <button className="flex w-full items-center justify-between px-[8px] py-[6px] text-[14px] font-[400] leading-[20px] text-[#334155] xl:hover:bg-gray-100">
                       {duration.title}
                       <svg
-                        className={`${selectedDuration.label === duration.label ? "block" : "hidden"}`}
+                        className={`${selectedDuration?.label === duration.label ? "block" : "hidden"}`}
                         xmlns="http://www.w3.org/2000/svg"
                         width="16"
                         height="16"
@@ -126,7 +131,7 @@ const ScheduledDate = () => {
             </ul>
           </div>
         </div>
-        {selectedDuration.label == "custom" && <Calendar />}
+        {selectedDuration?.label == "custom" && <Calendar />}
       </div>
     </>
   );
@@ -139,7 +144,7 @@ const Calendar = () => {
     formattedDate: string | undefined;
     toggle: boolean;
   };
-
+  const dispatch = useDispatch<AppDispatch>();
   function CustomCaptionComponent(props: CaptionProps) {
     const { goToMonth, nextMonth, previousMonth } = useNavigation();
     return (
@@ -202,6 +207,18 @@ const Calendar = () => {
     from: { date: undefined, formattedDate: undefined },
     to: { date: undefined, formattedDate: undefined },
   });
+
+  useEffect(() => {
+    if (selectedDates.from.date && selectedDates.to.date) {
+      dispatch(
+        setSelectedDuration({
+          from: selectedDates.from.date || null,
+          to: selectedDates.to.date || null,
+        }),
+      );
+      // dispatch(setSelectedDuration("custom"));
+    }
+  }, [selectedDates]);
 
   const [calendarToggle, setToggle] = useState<string | null>(null);
 
