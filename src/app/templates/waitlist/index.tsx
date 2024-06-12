@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React,{useState} from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "@/redux/store";
 import {
@@ -10,6 +10,7 @@ import {
 } from "@/redux/waitlist/clientSlice";
 import Table from "@/app/components/Table";
 import Search from "@/app/components/Search";
+import Modal from "@/app/components/Filter/Modal"
 
 const Waitlist = () => {
   const { waitlistTabs, currentTabSlug } = useSelector(
@@ -20,6 +21,7 @@ const Waitlist = () => {
   const handleSearch = (query: string) => {
     dispatch(setSearchClient(query));
   };
+  const [isModalOpen, setModalOpen] = useState(true);
 
   return (
     <div className="overflow-auto bg-[#F8FAFC] max-md:mx-auto max-md:w-[90%] md:h-screen md:px-[8px] md:pb-[24px] md:pt-[8px]">
@@ -27,6 +29,7 @@ const Waitlist = () => {
         <h1 className="mb-[20px] text-[24px] font-[600] leading-[32px] text-[#334155] md:mb-[26px] md:text-[20px] md:leading-[28px]">
           Waitlist
         </h1>
+
         {/* Tab filter section start */}
         <nav
           aria-label="Filter options"
@@ -66,10 +69,12 @@ const Waitlist = () => {
           </ul>
         </nav>
         {/* Tab filter seciton End */}
+
         {/* Custom filter section start */}
         <div className="mb-[24px]">
-          <div className="flex items-center">
+          <div className="flex items-center relative">
             <button
+            onClick={() => setModalOpen(true)}
               aria-label="Add filter"
               className="flex items-center gap-x-[6px] mr-[5px] rounded-[6px] bg-[#F1F5F9] px-[12px] py-[8px]"
             >
@@ -169,9 +174,11 @@ const Waitlist = () => {
                 </svg>
               </div>
             </div>
+            {isModalOpen && <Modal />}
           </div>
         </div>
         {/* Custom filter section end */}
+
         <Table />
       </div>
     </div>
