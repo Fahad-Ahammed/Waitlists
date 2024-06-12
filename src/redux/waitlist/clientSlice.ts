@@ -23,9 +23,18 @@ type InitialState = {
   filteredValues: any;
   currentPage: number;
   searchClient: string;
-  selectedDuration: string;
+  duration: {
+    selectedLabel: string;
+    selectedTitle: string;
+    dropDown: Duration[];
+  };
 };
 
+type Duration = {
+  label: string;
+  title: string;
+  customDuration?: { from: Date | null; to: Date | null };
+};
 export type TabSlug = "allWaitlists" | "newlyAdded" | "leads";
 export type Tab = {
   slug: TabSlug;
@@ -57,17 +66,20 @@ const getClientsByTab = (slug: TabSlug): ClientType[] => {
 };
 
 // function to filter clients based on search query
-const filterClientsBySearch = (
+export const filterClientsBySearch = (
   clients: ClientType[],
   query: string,
+  searchBy?: keyof ClientType,
 ): ClientType[] => {
   if (!query) return clients;
 
-  const filteredClients = clients.filter(
-    (client) =>
-      client.payer.toLowerCase().includes(query.toLowerCase()) ||
-      client.email.toLowerCase().includes(query.toLowerCase()),
-  );
+  const filteredClients = clients.filter((client: ClientType) => {
+    const value = searchBy ? client[searchBy] : undefined;
+    return (
+      typeof value === "string" &&
+      value.toLowerCase().includes(query.toLowerCase())
+    );
+  });
 
   return filteredClients.length ? filteredClients : clients;
 };
@@ -162,7 +174,40 @@ const initialState: InitialState = {
   filteredValues: [],
   currentPage: 1,
   searchClient: "",
-  selectedDuration: "all",
+  duration: {
+    selectedLabel: "all",
+    selectedTitle: "All time",
+    dropDown: [
+      {
+        label: "all",
+        title: "All time",
+      },
+      {
+        label: "custom",
+        title: "Custom",
+      },
+      {
+        label: "last30Days",
+        title: "Last 30 days",
+      },
+      {
+        label: "thisMonth",
+        title: "This month",
+      },
+      {
+        label: "lastMonth",
+        title: "Last month",
+      },
+      {
+        label: "thisQuarter",
+        title: "This quarter",
+      },
+      {
+        label: "2quarterAgo",
+        title: "2 quarter ago",
+      },
+    ],
+  },
 };
 
 const clientSlice = createSlice({
@@ -181,30 +226,36 @@ const clientSlice = createSlice({
     setCurrentPage: (state, action: PayloadAction<number>) => {
       state.currentPage = action.payload;
     },
-    // Search by client filter
+    // Search by client from waitlist page
     setSearchClient: (state, action: PayloadAction<string>) => {
       state.searchClient = action.payload;
       const clients = getClientsByTab(state.currentTabSlug);
       state.filteredWaitlist = filterClientsBySearch(
         clients,
         state.searchClient,
+        "payer",
       );
     },
     // Date range filter
-    setSelectedDuration: (
-      state,
-      action: PayloadAction<string | { from: Date | null; to: Date | null }>,
-    ) => {
-      state.selectedDuration =
-        typeof action.payload === "string" ? action.payload : "custom";
+    setSelectedDuration: (state, action: PayloadAction<Duration>) => {
+      state.duration.selectedLabel = action.payload.label;
+      state.duration.selectedTitle = action.payload.title;
+
       const clients = getClientsByTab(state.currentTabSlug);
       state.filteredScheduleDateWaitlist = filterWaitlistByDuration(
         clients,
-        state.selectedDuration,
-        typeof action.payload === "string" ? null : action.payload,
+        state.duration.selectedLabel,
+        action.payload.customDuration ?? null,
       );
       state.filteredValues.push(action.payload);
     },
+
+    setfilteredPeopleWaitlist: (state, action: PayloadAction<ClientType[]>) => {
+      console.log(action.payload);
+
+      state.filteredPeopleWaitlist = action.payload;
+    },
+
     applyFilter: (state) => {
       if (state.filteredValues) {
         state.tempWaitlist = [
@@ -225,7 +276,7 @@ export const {
   setCurrentPage,
   setSearchClient,
   setSelectedDuration,
-  // setCustomDateRange,
+  setfilteredPeopleWaitlist,
   applyFilter,
 } = clientSlice.actions;
 
