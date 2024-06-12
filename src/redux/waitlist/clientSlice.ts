@@ -1,15 +1,31 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import data from "@/lib/data";
 import { ClientType } from "@/lib/data";
-import { differenceInDays, parseISO } from "date-fns";
+import {
+  differenceInDays,
+  parseISO,
+  isWithinInterval,
+  startOfMonth,
+  endOfMonth,
+  startOfQuarter,
+  endOfQuarter,
+  subQuarters,
+} from "date-fns";
 
 type InitialState = {
   waitlistTabs: Tab[];
   currentTabSlug: TabSlug;
   filteredWaitlist: ClientType[];
+  tempWaitlist: ClientType[];
+  filteredScheduleDateWaitlist: ClientType[];
+  filteredPeopleWaitlist: ClientType[];
+  filteredServicesProductsWaitlist: ClientType[];
+  filteredValues: any;
   currentPage: number;
   searchClient: string;
+  selectedDuration: string;
 };
+
 export type TabSlug = "allWaitlists" | "newlyAdded" | "leads";
 export type Tab = {
   slug: TabSlug;
@@ -19,9 +35,10 @@ export type Tab = {
 // function to determine if a client is a lead
 const isLead = (client: ClientType): boolean =>
   client.status.toLowerCase() === "lead";
+
 // function to determine if a client is newly added
 const isNewlyAdded = (client: ClientType): boolean => {
-  const currentDate = parseISO("2024-01-05T14:42:00"); // taking 2024-01-05T14:42:00 as currentDate
+  const currentDate = new Date(); // taking 2024-01-05T14:42:00 as currentDate
   const entryDate = parseISO(client.entryDate);
   return differenceInDays(currentDate, entryDate) <= 30;
 };
@@ -55,6 +72,69 @@ const filterClientsBySearch = (
   return filteredClients.length ? filteredClients : clients;
 };
 
+// function to filter clients based on duration
+const filterWaitlistByDuration = (
+  clients: ClientType[],
+  duration: string,
+  customDateRange: null | { from: Date | null; to: Date | null },
+): ClientType[] => {
+  const currentDate = new Date();
+  switch (duration) {
+    case "last30Days":
+      return clients.filter(
+        (client) =>
+          differenceInDays(currentDate, new Date(client.scheduled)) <= 30,
+      );
+    case "thisMonth":
+      return clients.filter((client) =>
+        isWithinInterval(new Date(client.scheduled), {
+          start: startOfMonth(currentDate),
+          end: endOfMonth(currentDate),
+        }),
+      );
+    case "lastMonth":
+      const lastMonth = new Date(
+        currentDate.getFullYear(),
+        currentDate.getMonth() - 1,
+        1,
+      );
+      return clients.filter((client) =>
+        isWithinInterval(new Date(client.scheduled), {
+          start: startOfMonth(lastMonth),
+          end: endOfMonth(lastMonth),
+        }),
+      );
+    case "thisQuarter":
+      return clients.filter((client) =>
+        isWithinInterval(new Date(client.scheduled), {
+          start: startOfQuarter(currentDate),
+          end: endOfQuarter(currentDate),
+        }),
+      );
+    case "2quarterAgo":
+      const twoQuartersAgo = subQuarters(currentDate, 2);
+      return clients.filter((client) =>
+        isWithinInterval(new Date(client.scheduled), {
+          start: startOfQuarter(twoQuartersAgo),
+          end: endOfQuarter(twoQuartersAgo),
+        }),
+      );
+    case "custom":
+      if (customDateRange?.from && customDateRange?.to) {
+        return clients.filter((client) =>
+          isWithinInterval(new Date(client.scheduled), {
+            start: customDateRange.from || "",
+            end: customDateRange.to || "",
+          }),
+        );
+      }
+      return clients;
+    case "all":
+    default:
+      return clients;
+  }
+};
+
 const initialState: InitialState = {
   waitlistTabs: [
     {
@@ -75,8 +155,14 @@ const initialState: InitialState = {
   ],
   currentTabSlug: "allWaitlists",
   filteredWaitlist: [...data], // Initially loading with all waitlists because default tab section is set to All waitlists
+  tempWaitlist: [],
+  filteredScheduleDateWaitlist: [],
+  filteredPeopleWaitlist: [],
+  filteredServicesProductsWaitlist: [],
+  filteredValues: [],
   currentPage: 1,
   searchClient: "",
+  selectedDuration: "all",
 };
 
 const clientSlice = createSlice({
@@ -104,10 +190,43 @@ const clientSlice = createSlice({
         state.searchClient,
       );
     },
+    // Date range filter
+    setSelectedDuration: (
+      state,
+      action: PayloadAction<string | { from: Date | null; to: Date | null }>,
+    ) => {
+      state.selectedDuration =
+        typeof action.payload === "string" ? action.payload : "custom";
+      const clients = getClientsByTab(state.currentTabSlug);
+      state.filteredScheduleDateWaitlist = filterWaitlistByDuration(
+        clients,
+        state.selectedDuration,
+        typeof action.payload === "string" ? null : action.payload,
+      );
+      state.filteredValues.push(action.payload);
+    },
+    applyFilter: (state) => {
+      if (state.filteredValues) {
+        state.tempWaitlist = [
+          ...state.filteredScheduleDateWaitlist,
+          ...state.filteredPeopleWaitlist,
+          ...state.filteredServicesProductsWaitlist,
+        ];
+        state.filteredWaitlist = state.tempWaitlist;
+        state.currentPage = 1;
+      } else {
+      }
+    },
   },
 });
 
-export const { setCurrentTabList, setCurrentPage, setSearchClient } =
-  clientSlice.actions;
+export const {
+  setCurrentTabList,
+  setCurrentPage,
+  setSearchClient,
+  setSelectedDuration,
+  // setCustomDateRange,
+  applyFilter,
+} = clientSlice.actions;
 
 export default clientSlice.reducer;
