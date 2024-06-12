@@ -11,6 +11,7 @@ import {
 import Table from "@/app/components/Table";
 import Search from "@/app/components/Search";
 import Modal from "@/app/components/Filter/Modal";
+import { SearchStyle } from "@/app/components/Search";
 
 const Waitlist = () => {
   const { waitlistTabs, currentTabSlug } = useSelector(
@@ -22,6 +23,17 @@ const Waitlist = () => {
     dispatch(setSearchClient(query));
   };
   const [isModalOpen, setModalOpen] = useState(false);
+
+  // Custom Search componenet style
+  const classNames: SearchStyle = {
+    form: "relative rounded-sm bg-white px-[35px] py-[5px] shadow-md",
+    iconContainer:
+      "pointer-events-none absolute inset-y-0 left-[16px] flex items-center pr-3",
+    icon: "w-[12px] h-[12px]",
+    iconPath: "stroke-[#64748B]",
+    input:
+      "w-full text-[12px] font-[500] leading-[20px] text-[#374151] outline-none placeholder:text-[#94A3B8]",
+  };
 
   return (
     <div className="overflow-auto bg-[#F8FAFC] max-md:mx-auto max-md:w-[90%] md:h-screen md:px-[8px] md:pb-[24px] md:pt-[8px]">
@@ -98,7 +110,7 @@ const Waitlist = () => {
             </button>
             <div className="ml-auto">
               <div className="flex items-center gap-x-[10px] sm:gap-x-[26px]">
-                <Search onSearch={handleSearch} />
+                <Search onSearch={handleSearch} classNames={classNames} placeholder="Search Clients"  />
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
