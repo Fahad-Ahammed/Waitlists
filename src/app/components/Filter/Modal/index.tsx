@@ -18,7 +18,7 @@ const Modal = ({
   const dispatch = useDispatch<AppDispatch>();
   return (
     <div
-      className={`${isModalOpen ? "pointer-events-auto visible translate-y-[5px] opacity-100" : "pointer-events-none invisible translate-y-[-10px] opacity-0"} absolute left-0 top-[100%] z-10 rounded-[6px] border duration-300 ease-in-out xl:h-[400px] xl:w-[612px] xl:flex-[unset] xl:bg-[unset] xl:duration-200`}
+      className={`${isModalOpen ? "pointer-events-auto visible translate-y-[5px] opacity-100" : "pointer-events-none invisible translate-y-[-10px] opacity-0"} absolute left-0 top-[100%] z-10 rounded-[6px] border duration-300 ease-in-out md:h-[400px] md:w-[612px] md:flex-[unset] md:bg-[unset] md:duration-200`}
       role="dialog"
       aria-modal="true"
       aria-labelledby="filter-dialog-title"
