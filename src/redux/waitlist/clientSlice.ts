@@ -16,7 +16,6 @@ type InitialState = {
   waitlistTabs: Tab[];
   currentTabSlug: TabSlug;
   filteredWaitlist: ClientType[];
-  tempWaitlist: ClientType[];
   filteredScheduleDateWaitlist: ClientType[];
   filteredPeopleWaitlist: ClientType[];
   filteredServicesProductsWaitlist: ClientType[];
@@ -167,8 +166,7 @@ const initialState: InitialState = {
   ],
   currentTabSlug: "allWaitlists",
   filteredWaitlist: [...data], // Initially loading with all waitlists because default tab section is set to All waitlists
-  tempWaitlist: [],
-  filteredScheduleDateWaitlist: [],
+  filteredScheduleDateWaitlist: [...data],
   filteredPeopleWaitlist: [],
   filteredServicesProductsWaitlist: [],
   filteredValues: [],
@@ -221,6 +219,9 @@ const clientSlice = createSlice({
       const clients = getClientsByTab(slug);
       state.filteredWaitlist = filterClientsBySearch(clients, "");
       state.currentPage = 1;
+      state.duration.selectedLabel = "all";
+      state.duration.selectedTitle = "All Time";
+      state.filteredPeopleWaitlist = [];
     },
     // Table pagination page setting
     setCurrentPage: (state, action: PayloadAction<number>) => {
@@ -251,21 +252,23 @@ const clientSlice = createSlice({
     },
 
     setfilteredPeopleWaitlist: (state, action: PayloadAction<ClientType[]>) => {
-      console.log(action.payload);
-
       state.filteredPeopleWaitlist = action.payload;
     },
 
     applyFilter: (state) => {
       if (state.filteredValues) {
-        state.tempWaitlist = [
-          ...state.filteredScheduleDateWaitlist,
-          ...state.filteredPeopleWaitlist,
-          ...state.filteredServicesProductsWaitlist,
-        ];
-        state.filteredWaitlist = state.tempWaitlist;
+        let tempWaitlist = [];
+        if (state.filteredPeopleWaitlist.length > 0) {
+          tempWaitlist = state.filteredScheduleDateWaitlist.filter((schedule) =>
+            state.filteredPeopleWaitlist.some(
+              (person) => person.email === schedule.email,
+            ),
+          );
+        } else {
+          tempWaitlist = [...state.filteredScheduleDateWaitlist];
+        }
+        state.filteredWaitlist = tempWaitlist;
         state.currentPage = 1;
-      } else {
       }
     },
   },
