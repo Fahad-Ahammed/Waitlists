@@ -32,7 +32,7 @@ const SideBar: React.FC = () => {
   return (
     <>
       <header
-        className={`absolute left-0 z-[20] top-0 h-[65px] w-full bg-[#F8FAFC] ${isOpen ? "border-b" : "max-md:overflow-hidden"} py-[15px] duration-[500ms] ease-in-out md:relative md:left-[unset] md:top-[unset] md:flex md:h-screen md:flex-col md:border-none md:pb-[8px] md:pt-[12px] ${isOpen ? "md:min-w-[230px] md:max-w-[230px]" : "md:min-w-[64px] md:max-w-[64px] "} `}
+        className={`absolute left-0 top-0 z-[20] h-[65px] w-full bg-[#F8FAFC] ${isOpen ? "border-b" : "max-md:overflow-hidden"} py-[15px] duration-[500ms] ease-in-out md:relative md:left-[unset] md:top-[unset] md:flex md:h-screen md:flex-col md:border-none md:pb-[8px] md:pt-[12px] ${isOpen ? "md:min-w-[230px] md:max-w-[230px]" : "md:min-w-[64px] md:max-w-[64px]"} `}
       >
         <div className="max-md:mx-auto max-md:w-[90%] md:mx-[10px] md:mb-[15px] md:py-[10px] lg:mx-[8px] lg:mb-[12px] lg:py-[8px]">
           <div className="flex items-center gap-x-[4px] lg:gap-x-[8px]">
@@ -64,7 +64,7 @@ const SideBar: React.FC = () => {
             {/* hamburger end*/}
             <svg
               onClick={toggleSidebar}
-              className={`${isOpen ? "md:w-[16px] md:h-[16px]" : "md:w-0 md:h-0"} md:duration-300 md:ease-in-out ml-auto hidden md:block shrink-0 cursor-pointer`}
+              className={`${isOpen ? "md:h-[16px] md:w-[16px]" : "md:h-0 md:w-0"} ml-auto hidden shrink-0 cursor-pointer md:block md:duration-300 md:ease-in-out`}
               viewBox="0 0 16 16"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -160,7 +160,7 @@ const Logo: React.FC<NavBarProps> = ({ isOpen, toggleSidebar }) => {
 };
 
 const NavBar: React.FC<NavBarProps> = ({ isOpen }) => {
-  const pathName:string = usePathname();
+  const pathName: string = usePathname();
   const navStyles: string = `flex items-center gap-x-[5px] ${isOpen ? "md:gap-x-[5px]" : "md:gap-x-0"} md:duration-300 md:ease-in-out text-[20px] font-[500] leading-[28px] text-[#334155] md:mb-0 md:text-[14px] md:leading-[20px] lg:text-[12px] p-[15px] md:p-[8px]`;
 
   const OrdersIcon: React.FC<NavBarProps> = ({ isOpen }) => (
@@ -375,7 +375,7 @@ const NavBar: React.FC<NavBarProps> = ({ isOpen }) => {
               </div>
             </div>
             <div
-              className={`${isOpen ? "md:w-[193px]" : "md:translate-y-[-25px] md:mb-[0px] md:w-[29px]"} relative translate-y-[-5px] z-[1] mx-auto mb-[25px] w-[70%] rounded-b-[6px] bg-[#F1F5F9] px-[12px] py-[6px] shadow-md md:duration-500 md:ease-in-out`}
+              className={`${isOpen ? "md:w-[193px]" : "md:mb-[0px] md:w-[29px] md:translate-y-[-25px]"} relative z-[1] mx-auto mb-[25px] w-[70%] translate-y-[-5px] rounded-b-[6px] bg-[#F1F5F9] px-[12px] py-[6px] shadow-md md:duration-500 md:ease-in-out`}
             >
               <div
                 className={` ${isOpen ? "md:max-w-full" : "md:max-w-0"} mb-[6px] leading-[24px] md:overflow-hidden md:truncate md:leading-[20px] md:duration-300 md:ease-in-out`}
@@ -538,6 +538,7 @@ const NavBar: React.FC<NavBarProps> = ({ isOpen }) => {
                       className="cover"
                       src={"/user.png"}
                       fill
+                      sizes="(max-width: 768px) 100vw"
                       alt="User avatar"
                     />
                   </div>
