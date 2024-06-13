@@ -10,9 +10,12 @@ import {
 } from "@/redux/waitlist/clientSlice";
 import Table from "@/app/components/Table";
 import Search from "@/app/components/Search";
-import Modal from "@/app/components/Filter/Modal";
 import { SearchStyle } from "@/app/components/Search";
-import ColumnFilter from "@/app/components/ColumnFilter";
+import dynamic from "next/dynamic";
+
+
+const Modal = dynamic(() => import("@/app/components/Filter/Modal"));
+const ColumnFilter = dynamic(() => import("@/app/components/ColumnFilter"));
 
 const Waitlist = () => {
   const { waitlistTabs, currentTabSlug } = useSelector(
@@ -72,14 +75,13 @@ const Waitlist = () => {
           >
             {waitlistTabs.map((element: Tab, index: number) => (
               <li
-                className="flex-1"
                 key={index}
                 role="tab"
                 aria-label={`${element.title} filter, ${element.count} items`}
                 aria-selected={
                   currentTabSlug === element.slug ? "true" : "false"
                 }
-                aria-controls={`filter-panel-${element.title}`}
+                className="flex-1"
               >
                 <button
                   onClick={() => {

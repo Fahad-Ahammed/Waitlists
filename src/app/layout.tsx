@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
 import "./globals.css";
-import Sidebar from "./components/SideBar";
 import ReduxProvider from "@/redux/provider";
+import dynamic from "next/dynamic";
+
+const Sidebar = dynamic(() => import("./components/SideBar"));
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -25,7 +27,7 @@ export default function RootLayout({
             <Sidebar />
             <main
               id="main-content"
-              className="overflow-hidden grow pt-[65px] md:pt-0"
+              className="grow overflow-hidden pt-[65px] md:pt-0"
               tabIndex={-1}
             >
               {children}

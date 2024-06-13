@@ -158,7 +158,7 @@ const SidePanel = ({ selectedTab, setSelectedTab }: any) => {
               {tab.icon}
               <span>{tab.name}</span>
               {tab.filterCount > 0 && (
-                <span className="ml-auto text-[12px] leading-[20px] text-[#64748B80] sm:text-[14px]">
+                <span className="ml-auto hidden sm:block text-[12px] leading-[20px] text-[#64748B80] sm:text-[14px]">
                   {tab.filterCount}
                 </span>
               )}

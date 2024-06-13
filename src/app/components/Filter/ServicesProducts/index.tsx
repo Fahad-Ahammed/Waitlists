@@ -67,7 +67,7 @@ const ServicesProducts = () => {
                 <input
                   type="radio"
                   name="searchBy"
-                  className="relative h-[16px] w-[16px] appearance-none rounded-full border border-[#E2E8F0] before:absolute before:left-[50%] before:top-[50%] before:h-[8px] before:w-[8px] before:translate-x-[-50%] before:translate-y-[-50%] before:rounded-full before:bg-black before:opacity-0 before:duration-300 before:content-[''] checked:before:opacity-100"
+                  className="relative h-[16px] w-[16px] appearance-none rounded-full border border-[#E2E8F0] before:absolute before:left-[50%] before:top-[50%] before:h-[8px] before:w-[8px] before:translate-x-[-50%] before:translate-y-[-50%] before:rounded-full before:bg-black before:opacity-0 before:duration-100 before:content-[''] checked:before:opacity-100"
                   checked={searchBy.label === item.label}
                   onChange={() =>
                     setSearchBy({ ...searchBy, ["label"]: item.label })

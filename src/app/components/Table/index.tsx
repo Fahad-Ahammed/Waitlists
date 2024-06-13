@@ -79,11 +79,10 @@ const Table = ({ visibleColumns }: any) => {
         <div className="md:mx-auo relative mb-[12px] max-h-[400px] overflow-auto rounded-lg border md:max-w-[1350px] lg:max-h-[500px]">
           <table className="relative w-[900px] table-fixed text-left xl:w-full">
             <thead className="sticky top-0 z-[4] border-b bg-[#F8FAFC] py-[8px] text-[12px] capitalize leading-[20px] text-[#64748B]">
-              <tr role="row">
+              <tr>
                 <th
                   scope="col"
                   className="w-[14px] py-[12px] pl-[16px] pr-[30px]"
-                  role="column header"
                 >
                   <div className="flex w-[14px] items-center">
                     <input
@@ -98,11 +97,7 @@ const Table = ({ visibleColumns }: any) => {
                   </div>
                 </th>
                 {visibleColumns.includes("orderCreatedOn") && (
-                  <th
-                    scope="col"
-                    className="w-[182px] pr-[16px] font-[500]"
-                    role="column header"
-                  >
+                  <th scope="col" className="w-[182px] pr-[16px] font-[500]">
                     <div className="flex w-fit items-center gap-x-[4px]">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -141,11 +136,7 @@ const Table = ({ visibleColumns }: any) => {
                   </th>
                 )}
                 {visibleColumns.includes("payer") && (
-                  <th
-                    scope="col"
-                    className="w-[152px] pr-[16px] font-[500]"
-                    role="column header"
-                  >
+                  <th scope="col" className="w-[152px] pr-[16px] font-[500]">
                     <div className="flex items-center gap-x-[4px]">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -172,11 +163,7 @@ const Table = ({ visibleColumns }: any) => {
                   </th>
                 )}
                 {visibleColumns.includes("status") && (
-                  <th
-                    scope="col"
-                    className="w-[136px] pr-[16px] font-[500]"
-                    role="column header"
-                  >
+                  <th scope="col" className="w-[136px] pr-[16px] font-[500]">
                     <div className="flex items-center gap-x-[4px]">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -210,11 +197,7 @@ const Table = ({ visibleColumns }: any) => {
                   </th>
                 )}
                 {visibleColumns.includes("email") && (
-                  <th
-                    scope="col"
-                    className="w-[200px] pr-[16px] font-[500]"
-                    role="column header"
-                  >
+                  <th scope="col" className="w-[200px] pr-[16px] font-[500]">
                     <div className="flex items-center gap-x-[4px]">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -253,11 +236,7 @@ const Table = ({ visibleColumns }: any) => {
                   </th>
                 )}
                 {visibleColumns.includes("payerPhone") && (
-                  <th
-                    scope="col"
-                    className="w-[146px] pr-[16px] font-[500]"
-                    role="column header"
-                  >
+                  <th scope="col" className="w-[146px] pr-[16px] font-[500]">
                     <div className="flex items-center gap-x-[4px]">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -296,11 +275,7 @@ const Table = ({ visibleColumns }: any) => {
                   </th>
                 )}
                 {visibleColumns.includes("service") && (
-                  <th
-                    scope="col"
-                    className="w-[200px] pr-[16px] font-[500]"
-                    role="column header"
-                  >
+                  <th scope="col" className="w-[200px] pr-[16px] font-[500]">
                     <div className="flex items-center gap-x-[4px]">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -339,11 +314,7 @@ const Table = ({ visibleColumns }: any) => {
                   </th>
                 )}
                 {visibleColumns.includes("scheduled") && (
-                  <th
-                    scope="col"
-                    className="w-[180px] pr-[16px] font-[500]"
-                    role="column header"
-                  >
+                  <th scope="col" className="w-[180px] pr-[16px] font-[500]">
                     <div className="flex items-center gap-x-[4px]">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -391,11 +362,14 @@ const Table = ({ visibleColumns }: any) => {
                       <td className="w-fit px-[16px]">
                         <div className="flex items-center">
                           <input
-                            id="checkbox-table-1"
+                            id={`checkbox-table-${index + 1}`}
                             type="checkbox"
                             className="relative h-[14px] w-[14px] shrink-0 cursor-pointer appearance-none rounded-[4px] border border-[#E5E7EB] shadow-sm checked:border-0 checked:bg-green-800"
                           />
-                          <label htmlFor="checkbox-table-1" className="sr-only">
+                          <label
+                            htmlFor={`checkbox-table-${index + 1}`}
+                            className="sr-only"
+                          >
                             checkbox
                           </label>
                         </div>
