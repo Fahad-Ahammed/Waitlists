@@ -6,8 +6,16 @@ import { RootState, AppDispatch } from "@/redux/store";
 import { setfilteredPeopleWaitlist } from "@/redux/waitlist/clientSlice";
 import { ClientType } from "@/lib/data";
 
+type PeopleProps = {
+  filteredWaitlist: ClientType[];
+  selectedClients: ClientType[];
+  onClientSelect: (clients: ClientType[]) => void;
+  classNames: SearchStyle;
+  searchLabel: keyof ClientType;
+  hideTags:boolean;
+};
+
 const People = () => {
-  // Define styles for the search component
   const classNames: SearchStyle = {
     form: "relative rounded-[6px] bg-[#F9FAFB] border border-[#E2E8F0] px-[35px] py-[4px] mb-[16px]",
     iconContainer:
@@ -17,64 +25,76 @@ const People = () => {
     input:
       "w-full text-[14px] font-[400] leading-[20px] text-[#3F3F46] outline-none placeholder:text-[#9CA3AF]",
   };
+
   const { filteredWaitlist, filteredPeopleWaitlist } = useSelector(
     (state: RootState) => state.waitlist,
   );
   const dispatch = useDispatch<AppDispatch>();
 
-  // const [selectedPeople, setSelectedPeople] = useState<ClientType[]>([]);
+  const handleClientSelect = (clients: ClientType[]) => {
+    dispatch(setfilteredPeopleWaitlist(clients));
+  };
+
+  return (
+    <DynamicSearch
+      filteredWaitlist={filteredWaitlist}
+      selectedClients={filteredPeopleWaitlist}
+      onClientSelect={handleClientSelect}
+      classNames={classNames}
+      searchLabel="payer"
+      hideTags={false}
+    />
+  );
+};
+
+export const DynamicSearch: React.FC<PeopleProps> = ({
+  filteredWaitlist,
+  selectedClients,
+  onClientSelect,
+  classNames,
+  searchLabel,
+  hideTags
+}) => {
   const [searchResult, setSearchResult] = useState<ClientType[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
 
-  // Handle search functionality
   const handleSearch = (query: string) => {
     setSearchQuery(query);
-    // Filter and sort the results based on the search query
     const sortedSearchResult = filteredWaitlist
       .filter(
         (client: ClientType) =>
-          client.payer.toLowerCase().includes(query.toLowerCase()) &&
-          !filteredPeopleWaitlist.some(
-            (selected) => selected.payer === client.payer,
+          client[searchLabel].toLowerCase().includes(query.toLowerCase()) &&
+          !selectedClients.some(
+            (selected) => selected[searchLabel] === client[searchLabel],
           ),
       )
-      .sort((a, b) => a.payer.localeCompare(b.payer));
+      .sort((a, b) => a[searchLabel].localeCompare(b[searchLabel]));
     setSearchResult(sortedSearchResult);
   };
 
-  // Handle the selection of a client
   const handleCheckboxChange = (client: ClientType) => {
-    // Add the selected client to the list and sort alphabetically
-
-    const updated = [...filteredPeopleWaitlist, client];
-    dispatch(
-      setfilteredPeopleWaitlist(
-        updated.sort((a, b) => a.payer.localeCompare(b.payer)),
-      ),
+    const updated = [...selectedClients, client];
+    onClientSelect(
+      updated.sort((a, b) => a[searchLabel].localeCompare(b[searchLabel])),
     );
-    // Remove the selected client from the search results
     setSearchResult((prev) =>
-      prev.filter((item) => item.payer !== client.payer),
+      prev.filter((item) => item[searchLabel] !== client[searchLabel]),
     );
   };
 
-  // Handle the removal of a selected client
   const handleRemoveSelected = (client: ClientType) => {
-    // Remove the client from the selected list and sort alphabetically
-    const updated = filteredPeopleWaitlist.filter(
-      (item) => item.payer !== client.payer,
+    const updated = selectedClients.filter(
+      (item) => item[searchLabel] !== client[searchLabel],
     );
-    dispatch(
-      setfilteredPeopleWaitlist(
-        updated.sort((a, b) => a.payer.localeCompare(b.payer)),
-      ),
+    onClientSelect(
+      updated.sort((a, b) => a[searchLabel].localeCompare(b[searchLabel])),
     );
-
-    // Add the client back to the search results if a search query is present
     if (searchQuery.length > 0) {
       setSearchResult((prev) => {
         const updated = [...prev, client];
-        return updated.sort((a, b) => a.payer.localeCompare(b.payer));
+        return updated.sort((a, b) =>
+          a[searchLabel].localeCompare(b[searchLabel]),
+        );
       });
     }
   };
@@ -86,11 +106,10 @@ const People = () => {
         classNames={classNames}
         placeholder="Search Payer or attendee name"
       />
-      <div className="relative z-[10] mt-[8px] max-h-[250px] overflow-scroll md:mt-[12px] md:max-h-[250px]">
-        {/* Display selected clients */}
-        {filteredPeopleWaitlist.length > 0 &&
-          searchQuery.length == 0 &&
-          filteredPeopleWaitlist.map((people: ClientType, index: number) => {
+      <div className="relative z-[10] mt-[8px] max-h-[200px] overflow-scroll md:mt-[12px] md:max-h-[200px]">
+        {selectedClients.length > 0 &&
+          searchQuery.length === 0 &&
+          selectedClients.map((people: ClientType, index: number) => {
             return (
               <ul key={index}>
                 <li>
@@ -98,12 +117,13 @@ const People = () => {
                     onCheck={handleRemoveSelected}
                     people={people}
                     checked
+                    searchLabel={searchLabel}
+                    hideTags={hideTags}
                   />
                 </li>
               </ul>
             );
           })}
-        {/* Display search results */}
         {searchQuery.length > 0 && (
           <>
             <span className="mb-[12px] block text-[12px] font-[400] leading-[20px] text-[#0F172A]">{`Showing ${searchResult.slice(0, 10).length} results matching '${searchQuery}' `}</span>
@@ -117,6 +137,8 @@ const People = () => {
                         onCheck={handleCheckboxChange}
                         people={people}
                         checked={false}
+                        searchLabel={searchLabel}
+                        hideTags={hideTags}
                       />
                     </li>
                   </ul>
@@ -129,13 +151,21 @@ const People = () => {
   );
 };
 
-type CheckBox = {
+export type CheckBoxType = {
   onCheck: (people: ClientType) => void;
   people: ClientType;
   checked: boolean;
+  searchLabel: keyof ClientType;
+  hideTags:boolean
 };
 
-const CheckBox: React.FC<CheckBox> = ({ onCheck, people, checked }) => {
+export const CheckBox: React.FC<CheckBoxType> = ({
+  onCheck,
+  people,
+  checked,
+  searchLabel,
+  hideTags
+}) => {
   return (
     <div className="mb-[8px] flex gap-x-[8px]">
       <div className="flex items-center gap-[8px]">
@@ -146,11 +176,19 @@ const CheckBox: React.FC<CheckBox> = ({ onCheck, people, checked }) => {
           className="relative h-[14px] w-[14px] shrink-0 cursor-pointer appearance-none rounded-[2px] border border-[#E5E7EB] bg-white shadow-sm checked:bg-black"
         />
         <label className="text-[14px] leading-[20px] text-[#374151]">
-          {people.payer}
+          {people[searchLabel]}
         </label>
       </div>
-      <span className="rounded-[4px] bg-[#F8FAFC] px-[10px] py-[2px] text-[14px] capitalize leading-[20px] text-[#334155]">
+      <span className={`${hideTags?"hidden":"inline-block"} h-fit w-fit rounded-[4px] bg-[#F8FAFC] px-[8px] py-[2px] text-[10px] font-[500] capitalize leading-[16px] text-[#334155]`}>
         {people.tags}
+      </span>
+      <span className={`${!hideTags?"hidden":"inline-block"} ml-auto rounded-[4px] bg-[#F8FAFC] px-[8px] py-[2px] text-[10px] font-[500] leading-[16px] text-[#475467]`}>
+        {people.serviceType}
+      </span>
+      <span
+        className={`${!hideTags?"hidden":"inline-block"} rounded-[4px] bg-[#F8FAFC] px-[8px] py-[2px] text-[10px] font-[500] leading-[16px] ${people.statusType.toLowerCase() == "public" ? "text-[#039855]" : people.statusType.toLowerCase() == "private" ? "text-[#BF8000]" : "text-[#475467]"} `}
+      >
+        {people.statusType}
       </span>
     </div>
   );
