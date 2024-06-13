@@ -433,7 +433,10 @@ const Table = ({ visibleColumns }: any) => {
                       )}
                       {visibleColumns.includes("scheduled") && (
                         <td className="py-[10px] pr-[16px] text-[12px] font-[500] leading-[20px] text-[#374151]">
-                          {item.scheduled}
+                          {format(
+                            new Date(item.scheduled),
+                            "EEE, dd MMM yyyy h:mm a",
+                          )}
                         </td>
                       )}
                     </tr>
@@ -448,7 +451,7 @@ const Table = ({ visibleColumns }: any) => {
         {/* pagination section start */}
         <div className="items-center justify-between md:flex md:max-w-[1350px] md:pr-[40px]">
           <div className="mb-[20px] flex items-center gap-x-[10px] md:mb-0 md:max-w-[210px] md:gap-x-[2px]">
-            <span className="text-[14px] focus:border leading-[20px] text-[#64748B]">
+            <span className="text-[14px] leading-[20px] text-[#64748B] focus:border">
               Displaying
             </span>
             <div className="flex items-center justify-center gap-[6px] rounded-[6px] bg-[#F8FAFC] px-[12px] py-[4px]">
