@@ -121,9 +121,9 @@ const ServicesProducts = () => {
                   <path
                     d="M5 7.5L10 12.5L15 7.5"
                     stroke="#71717A"
-                    stroke-width="1.67"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                    strokeWidth="1.67"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                   />
                 </svg>
               </button>
@@ -156,9 +156,9 @@ const ServicesProducts = () => {
                               <path
                                 d="M13.3334 4L6.00002 11.3333L2.66669 8"
                                 stroke="#71717A"
-                                stroke-width="2"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
                               />
                             </svg>
                           </button>
@@ -189,9 +189,9 @@ const ServicesProducts = () => {
                   <path
                     d="M5 7.5L10 12.5L15 7.5"
                     stroke="#71717A"
-                    stroke-width="1.67"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                    strokeWidth="1.67"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                   />
                 </svg>
               </button>
@@ -224,9 +224,9 @@ const ServicesProducts = () => {
                               <path
                                 d="M13.3334 4L6.00002 11.3333L2.66669 8"
                                 stroke="#71717A"
-                                stroke-width="2"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
                               />
                             </svg>
                           </button>

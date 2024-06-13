@@ -36,9 +36,9 @@ const ScheduledDate = () => {
               <path
                 d="M5 7.5L10 12.5L15 7.5"
                 stroke="#71717A"
-                stroke-width="1.67"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="1.67"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               />
             </svg>
           </button>
@@ -71,9 +71,9 @@ const ScheduledDate = () => {
                           <path
                             d="M13.3334 4L6.00002 11.3333L2.66669 8"
                             stroke="#71717A"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                           />
                         </svg>
                       </button>
@@ -118,9 +118,9 @@ const Calendar = () => {
             <path
               d="M10 12L6 8L10 4"
               stroke="#18181B"
-              stroke-width="1.33"
-              stroke-linecap="round"
-              stroke-linejoin="round"
+              strokeWidth="1.33"
+              strokeLinecap="round"
+              strokeLinejoin="round"
             />
           </svg>
         </button>
@@ -143,9 +143,9 @@ const Calendar = () => {
             <path
               d="M6 12L10 8L6 4"
               stroke="#09090B"
-              stroke-width="1.33"
-              stroke-linecap="round"
-              stroke-linejoin="round"
+              strokeWidth="1.33"
+              strokeLinecap="round"
+              strokeLinejoin="round"
             />
           </svg>
         </button>
