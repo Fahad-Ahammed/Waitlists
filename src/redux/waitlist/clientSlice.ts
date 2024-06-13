@@ -300,6 +300,8 @@ const clientSlice = createSlice({
         action.payload.customDuration ?? null,
       );
       state.filteredValues.push(action.payload.title);
+      state.filteredPeopleWaitlist = [];
+      state.filteredServicesProductsWaitlist.searchByName = [];
     },
 
     setfilteredPeopleWaitlist: (state, action: PayloadAction<ClientType[]>) => {
@@ -390,6 +392,20 @@ const clientSlice = createSlice({
       state.filteredWaitlist = filteredWaitlist;
       state.currentPage = 1;
     },
+    resetToDefault: (state) => {
+      const clients = getClientsByTab(state.currentTabSlug);
+      state.filteredWaitlist = filterClientsBySearch(clients, "");
+      state.currentPage = 1;
+      state.duration.selectedLabel = "all";
+      state.duration.selectedTitle = "All Time";
+      state.tags.serviceType.selectedLabel = "all";
+      state.tags.serviceType.selectedTitle = "show all service type";
+      state.tags.statusType.selectedLabel = "all";
+      state.tags.statusType.selectedTitle = "show all";
+      state.filteredPeopleWaitlist = [];
+      state.filteredServicesProductsWaitlist.searchByName = [];
+      state.filteredServicesProductsWaitlist.searchByTag = [];
+    },
   },
 });
 
@@ -403,6 +419,7 @@ export const {
   setFilteredServicesByName,
   setSelectedServiceType,
   setSelectedStatusType,
+  resetToDefault,
 } = clientSlice.actions;
 
 export default clientSlice.reducer;

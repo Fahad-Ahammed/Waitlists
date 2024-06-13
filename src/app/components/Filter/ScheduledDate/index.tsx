@@ -52,7 +52,7 @@ const ScheduledDate = () => {
                   return (
                     <li
                       onClick={() => {
-                        dispatch(setSelectedDuration(item));
+                        item.label !== duration.selectedLabel && dispatch(setSelectedDuration(item));
                         item.label !== duration.selectedLabel &&
                           setDropDown(false);
                       }}

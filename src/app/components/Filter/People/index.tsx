@@ -26,7 +26,7 @@ const People = () => {
       "w-full text-[14px] font-[400] bg-transparent  leading-[20px] text-[#3F3F46] outline-none placeholder:text-[#9CA3AF]",
   };
 
-  const { filteredWaitlist, filteredPeopleWaitlist } = useSelector(
+  const { filteredScheduleDateWaitlist, filteredPeopleWaitlist } = useSelector(
     (state: RootState) => state.waitlist,
   );
   const dispatch = useDispatch<AppDispatch>();
@@ -37,7 +37,7 @@ const People = () => {
 
   return (
     <DynamicSearch
-      filteredWaitlist={filteredWaitlist}
+      filteredWaitlist={filteredScheduleDateWaitlist}
       selectedClients={filteredPeopleWaitlist}
       onClientSelect={handleClientSelect}
       classNames={classNames}

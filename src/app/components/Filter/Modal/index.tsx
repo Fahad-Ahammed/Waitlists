@@ -3,9 +3,9 @@ import ScheduledDate from "../ScheduledDate";
 import People from "../People";
 import ServicesProducts from "../ServicesProducts";
 import SidePanel from "../Modal/SidePanel";
-import { useSelector, useDispatch } from "react-redux";
-import { RootState, AppDispatch } from "@/redux/store";
-import { applyFilter } from "@/redux/waitlist/clientSlice";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/redux/store";
+import { applyFilter, resetToDefault } from "@/redux/waitlist/clientSlice";
 
 const Modal = ({
   isModalOpen,
@@ -33,7 +33,10 @@ const Modal = ({
           <Content selectedTab={selectedTab} />
         </div>
         <div className="flex items-center justify-end gap-x-[16px] border-t px-[16px] py-[8px] text-[14px] font-[500] leading-[24px]">
-          <button className="rounded-md bg-[#F4F4F5] px-[16px] py-[6px] text-[#09090B]">
+          <button
+            onClick={() => dispatch(resetToDefault())}
+            className="rounded-md bg-[#F4F4F5] px-[16px] py-[6px] text-[#09090B]"
+          >
             Reset to Default
           </button>
           <button
