@@ -136,7 +136,9 @@ const SidePanel = ({ selectedTab, setSelectedTab }: any) => {
       id: "tab-button-services-products",
       relatedPanelId: "tab-services-products",
       icon: <ServicesOrProductIcon />,
-      filterCount: filteredServicesProductsWaitlist.length,
+      filterCount:
+        filteredServicesProductsWaitlist.searchByName.length ??
+        filteredServicesProductsWaitlist.searchByTag.length,
     },
   ];
 

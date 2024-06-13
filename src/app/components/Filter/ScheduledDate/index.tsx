@@ -81,7 +81,7 @@ const ScheduledDate = () => {
                   );
                 },
               )}
-            </ul>
+          </ul>
           </div>
         </div>
         {duration.selectedLabel == "custom" && <Calendar />}

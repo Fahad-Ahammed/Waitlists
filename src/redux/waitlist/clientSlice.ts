@@ -18,7 +18,10 @@ type InitialState = {
   filteredWaitlist: ClientType[];
   filteredScheduleDateWaitlist: ClientType[];
   filteredPeopleWaitlist: ClientType[];
-  filteredServicesProductsWaitlist: ClientType[];
+  filteredServicesProductsWaitlist: {
+    searchByName: ClientType[];
+    searchByTag: string[];
+  };
   filteredValues: any;
   currentPage: number;
   searchClient: string;
@@ -27,6 +30,23 @@ type InitialState = {
     selectedTitle: string;
     dropDown: Duration[];
   };
+
+  tags: {
+    serviceType: {
+      selectedLabel: string;
+      selectedTitle: string;
+      dropdown: ServiceAndStatus[];
+    };
+    statusType: {
+      selectedLabel: string;
+      selectedTitle: string;
+      dropdown: ServiceAndStatus[];
+    };
+  };
+};
+type ServiceAndStatus = {
+  label: string;
+  title: string;
 };
 
 type Duration = {
@@ -168,7 +188,10 @@ const initialState: InitialState = {
   filteredWaitlist: [...data], // Initially loading with all waitlists because default tab section is set to All waitlists
   filteredScheduleDateWaitlist: [...data],
   filteredPeopleWaitlist: [],
-  filteredServicesProductsWaitlist: [],
+  filteredServicesProductsWaitlist: {
+    searchByName: [],
+    searchByTag: [],
+  },
   filteredValues: [],
   currentPage: 1,
   searchClient: "",
@@ -206,6 +229,32 @@ const initialState: InitialState = {
       },
     ],
   },
+  tags: {
+    serviceType: {
+      selectedLabel: "all",
+      selectedTitle: "show all service type",
+      dropdown: [
+        { label: "all", title: "show all service type" },
+        { label: "class", title: "Class" },
+        { label: "appointment", title: "appointment" },
+        { label: "facility", title: "facility" },
+        { label: "classPack", title: "class pack" },
+        { label: "membership", title: "membership" },
+        { label: "generalItems", title: "general items" },
+      ],
+    },
+    statusType: {
+      selectedLabel: "all",
+      selectedTitle: "show all",
+      dropdown: [
+        { label: "all", title: "show all" },
+        { label: "public", title: "public" },
+        { label: "private", title: "private" },
+        { label: "disable", title: "disable" },
+        { label: "draft", title: "draft" },
+      ],
+    },
+  },
 };
 
 const clientSlice = createSlice({
@@ -222,6 +271,8 @@ const clientSlice = createSlice({
       state.duration.selectedLabel = "all";
       state.duration.selectedTitle = "All Time";
       state.filteredPeopleWaitlist = [];
+      state.filteredServicesProductsWaitlist.searchByName = [];
+      state.filteredServicesProductsWaitlist.searchByTag = [];
     },
     // Table pagination page setting
     setCurrentPage: (state, action: PayloadAction<number>) => {
@@ -248,28 +299,96 @@ const clientSlice = createSlice({
         state.duration.selectedLabel,
         action.payload.customDuration ?? null,
       );
-      state.filteredValues.push(action.payload);
+      state.filteredValues.push(action.payload.title);
     },
 
     setfilteredPeopleWaitlist: (state, action: PayloadAction<ClientType[]>) => {
       state.filteredPeopleWaitlist = action.payload;
+      const filteredPeople = action.payload.map(
+        (client: ClientType) => client.payer,
+      );
+      state.filteredValues.push([...state.filteredValues, ...filteredPeople]);
+    },
+
+    setFilteredServicesByName: (state, action: PayloadAction<ClientType[]>) => {
+      state.filteredServicesProductsWaitlist.searchByName = action.payload;
+      const filteredServices = action.payload.map(
+        (client: ClientType) => client.services,
+      );
+      state.filteredValues.push([...state.filteredValues, ...filteredServices]);
+    },
+
+    setSelectedServiceType: (
+      state,
+      action: PayloadAction<{ label: string; title: string }>,
+    ) => {
+      state.tags.serviceType.selectedLabel = action.payload.label;
+      state.tags.serviceType.selectedTitle = action.payload.title;
+      state.filteredServicesProductsWaitlist.searchByTag.push(
+        action?.payload?.title,
+      );
+      state.filteredValues.push(action?.payload?.title);
+    },
+    setSelectedStatusType: (
+      state,
+      action: PayloadAction<{ label: string; title: string }>,
+    ) => {
+      state.tags.statusType.selectedLabel = action.payload.label;
+      state.tags.statusType.selectedTitle = action.payload.title;
+      state.filteredServicesProductsWaitlist.searchByTag.push(
+        action?.payload?.title,
+      );
+      state.filteredValues.push(action?.payload?.title);
     },
 
     applyFilter: (state) => {
-      if (state.filteredValues) {
-        let tempWaitlist = [];
-        if (state.filteredPeopleWaitlist.length > 0) {
-          tempWaitlist = state.filteredScheduleDateWaitlist.filter((schedule) =>
-            state.filteredPeopleWaitlist.some(
-              (person) => person.email === schedule.email,
-            ),
-          );
-        } else {
-          tempWaitlist = [...state.filteredScheduleDateWaitlist];
+      const hasPeople = state.filteredPeopleWaitlist.length > 0;
+      const hasNameSearch =
+        state.filteredServicesProductsWaitlist.searchByName.length > 0;
+      const hasTagSearch =
+        state.filteredServicesProductsWaitlist.searchByTag.length > 0;
+
+      // Function to match payer
+      const matchPayer = (schedule: ClientType) =>
+        state.filteredPeopleWaitlist.some(
+          (person) => person.payer === schedule.payer,
+        );
+
+      // Function to match services by name
+      const matchServiceByName = (item: ClientType) =>
+        state.filteredServicesProductsWaitlist.searchByName.some(
+          (service) =>
+            service.services.toLowerCase() === item.services.toLowerCase(),
+        );
+
+      // Function to match services by tag
+      const matchServiceByTag = (item: ClientType) =>
+        state.filteredServicesProductsWaitlist.searchByTag.some(
+          (tag) => tag.toLowerCase() === item.serviceType.toLowerCase(),
+        );
+
+      let filteredWaitlist = [];
+      if (hasPeople) {
+        filteredWaitlist =
+          state.filteredScheduleDateWaitlist.filter(matchPayer);
+
+        if (hasNameSearch) {
+          filteredWaitlist = filteredWaitlist.filter(matchServiceByName);
+        } else if (hasTagSearch) {
+          filteredWaitlist = filteredWaitlist.filter(matchServiceByTag);
         }
-        state.filteredWaitlist = tempWaitlist;
-        state.currentPage = 1;
+      } else if (hasNameSearch) {
+        filteredWaitlist =
+          state.filteredScheduleDateWaitlist.filter(matchServiceByName);
+      } else if (hasTagSearch) {
+        filteredWaitlist =
+          state.filteredScheduleDateWaitlist.filter(matchServiceByTag);
+      } else {
+        filteredWaitlist = [...state.filteredScheduleDateWaitlist];
       }
+
+      state.filteredWaitlist = filteredWaitlist;
+      state.currentPage = 1;
     },
   },
 });
@@ -281,6 +400,9 @@ export const {
   setSelectedDuration,
   setfilteredPeopleWaitlist,
   applyFilter,
+  setFilteredServicesByName,
+  setSelectedServiceType,
+  setSelectedStatusType,
 } = clientSlice.actions;
 
 export default clientSlice.reducer;

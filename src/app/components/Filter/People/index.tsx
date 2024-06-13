@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import Search from "@/app/components/Search";
 import { SearchStyle } from "@/app/components/Search";
 import { useSelector, useDispatch } from "react-redux";
@@ -12,7 +12,7 @@ type PeopleProps = {
   onClientSelect: (clients: ClientType[]) => void;
   classNames: SearchStyle;
   searchLabel: keyof ClientType;
-  hideTags:boolean;
+  hideTags: boolean;
 };
 
 const People = () => {
@@ -23,7 +23,7 @@ const People = () => {
     icon: "w-[16px] h-[16px]",
     iconPath: "stroke-[#3F3F46]",
     input:
-      "w-full text-[14px] font-[400] leading-[20px] text-[#3F3F46] outline-none placeholder:text-[#9CA3AF]",
+      "w-full text-[14px] font-[400] bg-transparent  leading-[20px] text-[#3F3F46] outline-none placeholder:text-[#9CA3AF]",
   };
 
   const { filteredWaitlist, filteredPeopleWaitlist } = useSelector(
@@ -53,13 +53,14 @@ export const DynamicSearch: React.FC<PeopleProps> = ({
   onClientSelect,
   classNames,
   searchLabel,
-  hideTags
+  hideTags,
 }) => {
   const [searchResult, setSearchResult] = useState<ClientType[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
-
+  const { currentTabSlug } = useSelector((state: RootState) => state.waitlist);
   const handleSearch = (query: string) => {
     setSearchQuery(query);
+    const uniqueClients = new Set();
     const sortedSearchResult = filteredWaitlist
       .filter(
         (client: ClientType) =>
@@ -68,6 +69,13 @@ export const DynamicSearch: React.FC<PeopleProps> = ({
             (selected) => selected[searchLabel] === client[searchLabel],
           ),
       )
+      .filter((client) => {
+        if (!uniqueClients.has(client[searchLabel])) {
+          uniqueClients.add(client[searchLabel]);
+          return true;
+        }
+        return false;
+      })
       .sort((a, b) => a[searchLabel].localeCompare(b[searchLabel]));
     setSearchResult(sortedSearchResult);
   };
@@ -99,6 +107,10 @@ export const DynamicSearch: React.FC<PeopleProps> = ({
     }
   };
 
+  useEffect(() => {
+    setSearchResult([]), setSearchQuery("");
+  }, [currentTabSlug]);
+
   return (
     <div id="tab-people" role="tabpanel" aria-labelledby="tab-button-people">
       <Search
@@ -106,7 +118,7 @@ export const DynamicSearch: React.FC<PeopleProps> = ({
         classNames={classNames}
         placeholder="Search Payer or attendee name"
       />
-      <div className="relative z-[10] mt-[8px] max-h-[200px] overflow-scroll md:mt-[12px] md:max-h-[200px]">
+      <div className="relative z-[10] mt-[8px] max-h-[150px] overflow-scroll md:mt-[12px] md:max-h-[200px]">
         {selectedClients.length > 0 &&
           searchQuery.length === 0 &&
           selectedClients.map((people: ClientType, index: number) => {
@@ -156,7 +168,7 @@ export type CheckBoxType = {
   people: ClientType;
   checked: boolean;
   searchLabel: keyof ClientType;
-  hideTags:boolean
+  hideTags: boolean;
 };
 
 export const CheckBox: React.FC<CheckBoxType> = ({
@@ -164,7 +176,7 @@ export const CheckBox: React.FC<CheckBoxType> = ({
   people,
   checked,
   searchLabel,
-  hideTags
+  hideTags,
 }) => {
   return (
     <div className="mb-[8px] flex gap-x-[8px]">
@@ -175,18 +187,22 @@ export const CheckBox: React.FC<CheckBoxType> = ({
           checked={checked}
           className="relative h-[14px] w-[14px] shrink-0 cursor-pointer appearance-none rounded-[2px] border border-[#E5E7EB] bg-white shadow-sm checked:bg-black"
         />
-        <label className="text-[14px] leading-[20px] text-[#374151]">
+        <label className="truncate text-[14px] leading-[20px] text-[#374151]">
           {people[searchLabel]}
         </label>
       </div>
-      <span className={`${hideTags?"hidden":"inline-block"} h-fit w-fit rounded-[4px] bg-[#F8FAFC] px-[8px] py-[2px] text-[10px] font-[500] capitalize leading-[16px] text-[#334155]`}>
+      <span
+        className={`${hideTags ? "hidden" : "inline-block"} h-fit w-fit rounded-[4px] bg-[#F8FAFC] px-[8px] py-[2px] text-[10px] font-[500] capitalize leading-[16px] text-[#334155]`}
+      >
         {people.tags}
       </span>
-      <span className={`${!hideTags?"hidden":"inline-block"} ml-auto rounded-[4px] bg-[#F8FAFC] px-[8px] py-[2px] text-[10px] font-[500] leading-[16px] text-[#475467]`}>
+      <span
+        className={`${!hideTags ? "hidden" : "inline-block"} ml-auto rounded-[4px] bg-[#F8FAFC] px-[8px] py-[2px] text-[10px] font-[500] leading-[16px] text-[#475467]`}
+      >
         {people.serviceType}
       </span>
       <span
-        className={`${!hideTags?"hidden":"inline-block"} rounded-[4px] bg-[#F8FAFC] px-[8px] py-[2px] text-[10px] font-[500] leading-[16px] ${people.statusType.toLowerCase() == "public" ? "text-[#039855]" : people.statusType.toLowerCase() == "private" ? "text-[#BF8000]" : "text-[#475467]"} `}
+        className={`${!hideTags ? "hidden" : "inline-block"} rounded-[4px] bg-[#F8FAFC] px-[8px] py-[2px] text-[10px] font-[500] leading-[16px] ${people.statusType.toLowerCase() == "public" ? "text-[#039855]" : people.statusType.toLowerCase() == "private" ? "text-[#BF8000]" : "text-[#475467]"} `}
       >
         {people.statusType}
       </span>
