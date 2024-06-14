@@ -14,7 +14,7 @@ const Chip = () => {
   const { chip, duration } = useSelector((state: RootState) => state.waitlist);
   const dispatch = useDispatch<AppDispatch>();
   return (
-    <ul className="mx-[16px] hidden max-w-[40%] items-center overflow-x-scroll lg:flex xl:max-w-[50%]">
+    <ul className="mx-[16px] hidden max-w-[40%] items-center gap-x-[6px] overflow-x-scroll lg:flex xl:max-w-[50%]">
       {chip.durationChip && duration.selectedLabel !== "all" && (
         <li className="flex max-h-[36px] max-w-[142px] items-center gap-x-[10px] rounded-[6px] bg-[#F8FAFC] py-[8px] pl-[16px] pr-[8px]">
           <span className="truncate text-[14px] font-[500] capitalize leading-[20px] text-[#64748B]">
