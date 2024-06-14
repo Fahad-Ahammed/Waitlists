@@ -451,7 +451,7 @@ const clientSlice = createSlice({
 
         if (hasProductOrServiceByName) {
           filteredWaitlist = filteredWaitlist.filter(matchServiceByName);
-        } else if (serviceType && statusType) {          
+        } else if (serviceType && statusType) {
           filteredWaitlist = filteredWaitlist.filter(
             (client: ClientType) =>
               client.serviceType.toLowerCase() == serviceType.toLowerCase() &&
@@ -503,6 +503,7 @@ const clientSlice = createSlice({
       state.tags.serviceType.selectedTitle = "show all service type";
       state.tags.statusType.selectedLabel = "all";
       state.tags.statusType.selectedTitle = "show all";
+      state.filteredScheduleDateWaitlist = clients;
       state.filteredPeopleWaitlist = [];
       state.filteredServicesProductsWaitlist.searchByName = [];
       state.filteredServicesProductsWaitlist.searchByServiceType = "";
