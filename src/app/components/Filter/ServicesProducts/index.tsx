@@ -24,8 +24,11 @@ const ServicesProducts = () => {
   const [isServiceDropDown, setServiceDropDown] = useState<boolean>(false);
   const [isStatusDropDown, setStatusDropDown] = useState<boolean>(false);
 
-  const { filteredWaitlist, filteredServicesProductsWaitlist, tags } =
-    useSelector((state: RootState) => state.waitlist);
+  const {
+    filteredScheduleDateWaitlist,
+    filteredServicesProductsWaitlist,
+    tags,
+  } = useSelector((state: RootState) => state.waitlist);
   const dispatch = useDispatch<AppDispatch>();
 
   const handleClientSelect = (clients: ClientType[]) => {
@@ -94,7 +97,7 @@ const ServicesProducts = () => {
           <DynamicSearch
             selectedClients={filteredServicesProductsWaitlist.searchByName}
             onClientSelect={handleClientSelect}
-            filteredWaitlist={filteredWaitlist}
+            filteredWaitlist={filteredScheduleDateWaitlist}
             classNames={classNames}
             searchLabel="services"
             hideTags
