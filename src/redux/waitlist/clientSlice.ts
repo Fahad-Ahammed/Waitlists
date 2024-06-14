@@ -22,7 +22,6 @@ type InitialState = {
     searchByName: ClientType[];
     searchByTag: string[];
   };
-  filteredValues: any;
   currentPage: number;
   searchClient: string;
   duration: {
@@ -30,7 +29,6 @@ type InitialState = {
     selectedTitle: string;
     dropDown: Duration[];
   };
-
   tags: {
     serviceType: {
       selectedLabel: string;
@@ -43,16 +41,25 @@ type InitialState = {
       dropdown: ServiceAndStatus[];
     };
   };
+  chip: Chip;  
 };
+
 type ServiceAndStatus = {
   label: string;
   title: string;
 };
 
-type Duration = {
+export type Duration = {
   label: string;
   title: string;
   customDuration?: { from: Date | null; to: Date | null };
+};
+
+type Chip = {
+  durationChip: string;
+  peopleChip: string[];
+  seviceByNameChip: string[];
+  serviceByTagChip: string[];
 };
 export type TabSlug = "allWaitlists" | "newlyAdded" | "leads";
 export type Tab = {
@@ -166,6 +173,14 @@ const filterWaitlistByDuration = (
   }
 };
 
+const initialChip: Chip = {
+  durationChip: "",
+  peopleChip: [],
+  seviceByNameChip: [],
+  serviceByTagChip: [],
+};
+
+export const initialDataSet: ClientType[] = [...data];
 const initialState: InitialState = {
   waitlistTabs: [
     {
@@ -185,14 +200,13 @@ const initialState: InitialState = {
     },
   ],
   currentTabSlug: "allWaitlists",
-  filteredWaitlist: [...data], // Initially loading with all waitlists because default tab section is set to All waitlists
-  filteredScheduleDateWaitlist: [...data],
+  filteredWaitlist: initialDataSet, // Initially loading with all waitlists because default tab section is set to All waitlists
+  filteredScheduleDateWaitlist: initialDataSet,
   filteredPeopleWaitlist: [],
   filteredServicesProductsWaitlist: {
     searchByName: [],
     searchByTag: [],
   },
-  filteredValues: [],
   currentPage: 1,
   searchClient: "",
   duration: {
@@ -255,6 +269,7 @@ const initialState: InitialState = {
       ],
     },
   },
+  chip: initialChip,
 };
 
 const clientSlice = createSlice({
@@ -270,9 +285,11 @@ const clientSlice = createSlice({
       state.currentPage = 1;
       state.duration.selectedLabel = "all";
       state.duration.selectedTitle = "All Time";
+      state.filteredScheduleDateWaitlist = clients;
       state.filteredPeopleWaitlist = [];
       state.filteredServicesProductsWaitlist.searchByName = [];
       state.filteredServicesProductsWaitlist.searchByTag = [];
+      state.chip = initialChip;
     },
     // Table pagination page setting
     setCurrentPage: (state, action: PayloadAction<number>) => {
@@ -281,9 +298,8 @@ const clientSlice = createSlice({
     // Search by client from waitlist page
     setSearchClient: (state, action: PayloadAction<string>) => {
       state.searchClient = action.payload;
-      const clients = getClientsByTab(state.currentTabSlug);
       state.filteredWaitlist = filterClientsBySearch(
-        clients,
+        state.filteredWaitlist,
         state.searchClient,
         "payer",
       );
@@ -299,25 +315,64 @@ const clientSlice = createSlice({
         state.duration.selectedLabel,
         action.payload.customDuration ?? null,
       );
-      state.filteredValues.push(action.payload.title);
-      state.filteredPeopleWaitlist = [];
-      state.filteredServicesProductsWaitlist.searchByName = [];
+      state.chip.durationChip = action.payload.title;
+      
+    },
+
+    removeScheduledDuration: (state) => {
+      state.duration.selectedLabel = "all";
+      state.duration.selectedTitle = "All time";
+      const clients = getClientsByTab(state.currentTabSlug);
+      state.filteredScheduleDateWaitlist = filterWaitlistByDuration(
+        clients,
+        state.duration.selectedLabel,
+        null,
+      );
     },
 
     setfilteredPeopleWaitlist: (state, action: PayloadAction<ClientType[]>) => {
       state.filteredPeopleWaitlist = action.payload;
-      const filteredPeople = action.payload.map(
-        (client: ClientType) => client.payer,
+      state.chip.peopleChip = state.filteredPeopleWaitlist.map(
+        (people: ClientType) => people.payer,
       );
-      state.filteredValues.push([...state.filteredValues, ...filteredPeople]);
+    },
+
+    removePeople: (
+      state,
+      action: PayloadAction<{ removeType: string; value: string }>,
+    ) => {
+      state.filteredPeopleWaitlist =
+        action.payload.removeType == "people"
+          ? state.filteredPeopleWaitlist.filter(
+              (people: ClientType) =>
+                action.payload.value.toLowerCase() !==
+                people.payer.toLowerCase(),
+            )
+          : state.filteredPeopleWaitlist;
+
+      state.chip.peopleChip = state.chip.peopleChip.filter(
+        (people: string) => people !== action.payload.value,
+      );
     },
 
     setFilteredServicesByName: (state, action: PayloadAction<ClientType[]>) => {
       state.filteredServicesProductsWaitlist.searchByName = action.payload;
-      const filteredServices = action.payload.map(
-        (client: ClientType) => client.services,
+      state.chip.seviceByNameChip =
+        state.filteredServicesProductsWaitlist.searchByName.map(
+          (client: ClientType) => client.services,
+        );
+    },
+
+    removeService: (state, action) => {
+      state.filteredServicesProductsWaitlist.searchByName =
+        action.payload.removeType == "service"
+          ? state.filteredServicesProductsWaitlist.searchByName.filter(
+              (client: ClientType) => client.services !== action.payload.value,
+            )
+          : state.filteredServicesProductsWaitlist.searchByName;
+      state.chip.seviceByNameChip = state.chip.seviceByNameChip.filter(
+        (service: string) => service !== action.payload.value,
       );
-      state.filteredValues.push([...state.filteredValues, ...filteredServices]);
     },
 
     setSelectedServiceType: (
@@ -329,7 +384,6 @@ const clientSlice = createSlice({
       state.filteredServicesProductsWaitlist.searchByTag.push(
         action?.payload?.title,
       );
-      state.filteredValues.push(action?.payload?.title);
     },
     setSelectedStatusType: (
       state,
@@ -340,12 +394,11 @@ const clientSlice = createSlice({
       state.filteredServicesProductsWaitlist.searchByTag.push(
         action?.payload?.title,
       );
-      state.filteredValues.push(action?.payload?.title);
     },
 
     applyFilter: (state) => {
       const hasPeople = state.filteredPeopleWaitlist.length > 0;
-      const hasNameSearch =
+      const hasProductOrService =
         state.filteredServicesProductsWaitlist.searchByName.length > 0;
       const hasTagSearch =
         state.filteredServicesProductsWaitlist.searchByTag.length > 0;
@@ -369,17 +422,17 @@ const clientSlice = createSlice({
           (tag) => tag.toLowerCase() === item.serviceType.toLowerCase(),
         );
 
-      let filteredWaitlist = [];
+      let filteredWaitlist = state.filteredScheduleDateWaitlist; //////////////////////////////
       if (hasPeople) {
         filteredWaitlist =
           state.filteredScheduleDateWaitlist.filter(matchPayer);
 
-        if (hasNameSearch) {
+        if (hasProductOrService) {
           filteredWaitlist = filteredWaitlist.filter(matchServiceByName);
         } else if (hasTagSearch) {
           filteredWaitlist = filteredWaitlist.filter(matchServiceByTag);
         }
-      } else if (hasNameSearch) {
+      } else if (hasProductOrService) {
         filteredWaitlist =
           state.filteredScheduleDateWaitlist.filter(matchServiceByName);
       } else if (hasTagSearch) {
@@ -388,7 +441,6 @@ const clientSlice = createSlice({
       } else {
         filteredWaitlist = [...state.filteredScheduleDateWaitlist];
       }
-
       state.filteredWaitlist = filteredWaitlist;
       state.currentPage = 1;
     },
@@ -420,6 +472,9 @@ export const {
   setSelectedServiceType,
   setSelectedStatusType,
   resetToDefault,
+  removePeople,
+  removeService,
+  removeScheduledDuration,
 } = clientSlice.actions;
 
 export default clientSlice.reducer;

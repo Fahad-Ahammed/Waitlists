@@ -25,7 +25,6 @@ const ServicesProducts = () => {
   const [isStatusDropDown, setStatusDropDown] = useState<boolean>(false);
 
   const {
-    filteredScheduleDateWaitlist,
     filteredServicesProductsWaitlist,
     tags,
   } = useSelector((state: RootState) => state.waitlist);
@@ -97,7 +96,6 @@ const ServicesProducts = () => {
           <DynamicSearch
             selectedClients={filteredServicesProductsWaitlist.searchByName}
             onClientSelect={handleClientSelect}
-            filteredWaitlist={filteredScheduleDateWaitlist}
             classNames={classNames}
             searchLabel="services"
             hideTags

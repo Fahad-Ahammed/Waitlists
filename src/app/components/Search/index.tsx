@@ -21,7 +21,9 @@ const SearchBar: React.FC<SearchBarProps> = ({
   classNames,
   placeholder,
 }) => {
-  const { currentTabSlug } = useSelector((state: RootState) => state.waitlist);
+  const { currentTabSlug } = useSelector(
+    (state: RootState) => state.waitlist,
+  );
 
   const [query, setQuery] = useState("");
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,6 +37,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
 
   useEffect(() => {
     setQuery("");
+    onSearch("");
   }, [currentTabSlug]);
 
   return (

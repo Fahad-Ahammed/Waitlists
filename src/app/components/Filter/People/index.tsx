@@ -3,11 +3,11 @@ import Search from "@/app/components/Search";
 import { SearchStyle } from "@/app/components/Search";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "@/redux/store";
+import { initialDataSet } from "@/redux/waitlist/clientSlice";
 import { setfilteredPeopleWaitlist } from "@/redux/waitlist/clientSlice";
 import { ClientType } from "@/lib/data";
 
 type PeopleProps = {
-  filteredWaitlist: ClientType[];
   selectedClients: ClientType[];
   onClientSelect: (clients: ClientType[]) => void;
   classNames: SearchStyle;
@@ -26,7 +26,7 @@ const People = () => {
       "w-full text-[14px] font-[400] bg-transparent  leading-[20px] text-[#3F3F46] outline-none placeholder:text-[#9CA3AF]",
   };
 
-  const { filteredScheduleDateWaitlist, filteredPeopleWaitlist } = useSelector(
+  const {filteredPeopleWaitlist } = useSelector(
     (state: RootState) => state.waitlist,
   );
   const dispatch = useDispatch<AppDispatch>();
@@ -37,7 +37,6 @@ const People = () => {
 
   return (
     <DynamicSearch
-      filteredWaitlist={filteredScheduleDateWaitlist}
       selectedClients={filteredPeopleWaitlist}
       onClientSelect={handleClientSelect}
       classNames={classNames}
@@ -47,8 +46,7 @@ const People = () => {
   );
 };
 
-export const DynamicSearch: React.FC<PeopleProps> = ({
-  filteredWaitlist,
+export const DynamicSearch: React.FC<PeopleProps> = ({  
   selectedClients,
   onClientSelect,
   classNames,
@@ -57,11 +55,10 @@ export const DynamicSearch: React.FC<PeopleProps> = ({
 }) => {
   const [searchResult, setSearchResult] = useState<ClientType[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const { currentTabSlug } = useSelector((state: RootState) => state.waitlist);
   const handleSearch = (query: string) => {
     setSearchQuery(query);
     const uniqueClients = new Set();
-    const sortedSearchResult = filteredWaitlist
+    const sortedSearchResult = initialDataSet
       .filter(
         (client: ClientType) =>
           client[searchLabel].toLowerCase().includes(query.toLowerCase()) &&
@@ -106,10 +103,6 @@ export const DynamicSearch: React.FC<PeopleProps> = ({
       });
     }
   };
-
-  useEffect(() => {
-    setSearchResult([]), setSearchQuery("");
-  }, [currentTabSlug]);
 
   return (
     <div id="tab-people" role="tabpanel" aria-labelledby="tab-button-people">

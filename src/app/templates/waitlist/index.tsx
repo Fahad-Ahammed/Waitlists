@@ -7,22 +7,28 @@ import {
   setCurrentTabList,
   Tab,
   setSearchClient,
+  removeScheduledDuration,
+  applyFilter,
+  removePeople,
+  removeService,
 } from "@/redux/waitlist/clientSlice";
 import Table from "@/app/components/Table";
 import Search from "@/app/components/Search";
 import { SearchStyle } from "@/app/components/Search";
+import { ClientType } from "@/lib/data";
 import dynamic from "next/dynamic";
 
 const Modal = dynamic(() => import("@/app/components/Filter/Modal"));
 const ColumnFilter = dynamic(() => import("@/app/components/ColumnFilter"));
 
 const Waitlist = () => {
-  const { waitlistTabs, currentTabSlug } = useSelector(
+  const { waitlistTabs, currentTabSlug, chip, duration } = useSelector(
     (state: RootState) => state.waitlist,
   );
   const dispatch = useDispatch<AppDispatch>();
 
   const handleSearch = (query: string) => {
+    dispatch(applyFilter());
     dispatch(setSearchClient(query));
   };
   const [isModalOpen, setModalOpen] = useState(false);
@@ -111,7 +117,17 @@ const Waitlist = () => {
           <div className="relative flex items-center">
             {visibleColumns.length > 0 && (
               <button
-                onClick={() => setModalOpen(!isModalOpen)}
+                onClick={() => {
+                  setModalOpen(!isModalOpen);
+                  if (
+                    chip.durationChip ||
+                    chip.peopleChip.length > 0 ||
+                    chip.seviceByNameChip.length > 0 ||
+                    chip.serviceByTagChip.length > 0
+                  ) {
+                    dispatch(applyFilter());
+                  }
+                }}
                 aria-label="Add filter"
                 className="relative mr-[5px] flex items-center gap-x-[6px] rounded-[6px] bg-[#F1F5F9] px-[12px] py-[8px]"
               >
@@ -134,6 +150,120 @@ const Waitlist = () => {
                 </span>
               </button>
             )}
+            <div className="mx-[16px] hidden max-w-[40%] items-center overflow-x-scroll lg:flex xl:max-w-[50%]">
+              {chip.durationChip && duration.selectedLabel !== "all" && (
+                <div className="flex max-h-[36px] max-w-[142px] items-center gap-x-[10px] rounded-[6px] bg-[#F8FAFC] py-[8px] pl-[16px] pr-[8px]">
+                  <span className="truncate text-[14px] font-[500] capitalize leading-[20px] text-[#64748B]">
+                    {duration.selectedTitle || "Name Missing"}
+                  </span>
+                  <span
+                    onClick={() => {
+                      dispatch(removeScheduledDuration());
+                      dispatch(applyFilter());
+                    }}
+                    className="cursor-pointer bg-[#F1F5F9] p-[6px]"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="14"
+                      height="14"
+                      viewBox="0 0 14 14"
+                      fill="none"
+                    >
+                      <path
+                        d="M10.5 3.5L3.5 10.5M3.5 3.5L10.5 10.5"
+                        stroke="#71717A"
+                        stroke-width="1.67"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </span>
+                </div>
+              )}
+              {chip.peopleChip.length > 0 &&
+                chip.peopleChip.map((people: string, index: number) => {
+                  return (
+                    <div
+                      key={index}
+                      className="flex max-h-[36px] max-w-[142px] items-center gap-x-[10px] rounded-[6px] bg-[#F8FAFC] py-[8px] pl-[16px] pr-[8px]"
+                    >
+                      <span className="truncate text-[14px] font-[500] capitalize leading-[20px] text-[#64748B]">
+                        {people || "Name Missing"}
+                      </span>
+                      <span
+                        onClick={() => {
+                          dispatch(
+                            removePeople({
+                              value: people,
+                              removeType: "people",
+                            }),
+                          );
+                          dispatch(applyFilter());
+                        }}
+                        className="cursor-pointer bg-[#F1F5F9] p-[6px]"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="14"
+                          height="14"
+                          viewBox="0 0 14 14"
+                          fill="none"
+                        >
+                          <path
+                            d="M10.5 3.5L3.5 10.5M3.5 3.5L10.5 10.5"
+                            stroke="#71717A"
+                            stroke-width="1.67"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                        </svg>
+                      </span>
+                    </div>
+                  );
+                })}
+              {chip.seviceByNameChip.length > 0 &&
+                chip.seviceByNameChip.map((service: string, index: number) => {
+                  return (
+                    <div
+                      key={index}
+                      className="flex max-h-[36px] max-w-[142px] items-center gap-x-[10px] rounded-[6px] bg-[#F8FAFC] py-[8px] pl-[16px] pr-[8px]"
+                    >
+                      <span className="truncate text-[14px] font-[500] capitalize leading-[20px] text-[#64748B]">
+                        {service || "Name Missing"}
+                      </span>
+                      <span
+                        onClick={() => {
+                          dispatch(
+                            removeService({
+                              value: service,
+                              removeType: "service",
+                            }),
+                          );
+                          dispatch(applyFilter());
+                        }}
+                        className="cursor-pointer bg-[#F1F5F9] p-[6px]"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="14"
+                          height="14"
+                          viewBox="0 0 14 14"
+                          fill="none"
+                        >
+                          <path
+                            d="M10.5 3.5L3.5 10.5M3.5 3.5L10.5 10.5"
+                            stroke="#71717A"
+                            stroke-width="1.67"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                        </svg>
+                      </span>
+                    </div>
+                  );
+                })}
+            </div>
             <div className="ml-auto">
               <div className="flex items-center gap-x-[10px] sm:gap-x-[26px]">
                 {visibleColumns.length > 0 &&
