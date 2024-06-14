@@ -72,8 +72,9 @@ const Table = ({ visibleColumns }: any) => {
       event.preventDefault();
     }
   };
+
   {
-    return limitedTableData.length > 0 ? (
+    return limitedTableData.length > 0 && visibleColumns.length > 0 ? (
       <>
         {/* table start */}
         <div className="md:mx-auo relative mb-[12px] max-h-[400px] overflow-auto rounded-lg border md:max-w-[1350px] lg:max-h-[500px]">

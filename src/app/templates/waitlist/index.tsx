@@ -13,7 +13,6 @@ import Search from "@/app/components/Search";
 import { SearchStyle } from "@/app/components/Search";
 import dynamic from "next/dynamic";
 
-
 const Modal = dynamic(() => import("@/app/components/Filter/Modal"));
 const ColumnFilter = dynamic(() => import("@/app/components/ColumnFilter"));
 
@@ -110,36 +109,41 @@ const Waitlist = () => {
             filterColumnDropdown={filterColumnDropdown}
           />
           <div className="relative flex items-center">
-            <button
-              onClick={() => setModalOpen(!isModalOpen)}
-              aria-label="Add filter"
-              className="relative mr-[5px] flex items-center gap-x-[6px] rounded-[6px] bg-[#F1F5F9] px-[12px] py-[8px]"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                viewBox="0 0 16 16"
-                fill="none"
+            {visibleColumns.length > 0 && (
+              <button
+                onClick={() => setModalOpen(!isModalOpen)}
+                aria-label="Add filter"
+                className="relative mr-[5px] flex items-center gap-x-[6px] rounded-[6px] bg-[#F1F5F9] px-[12px] py-[8px]"
               >
-                <path
-                  d="M14.6667 2H1.33337L6.66671 8.30667V12.6667L9.33337 14V8.30667L14.6667 2Z"
-                  stroke="#334155"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-              <span className="hidden text-[12px] font-[500] capitalize leading-[20px] text-[#334155] md:block">
-                add filter
-              </span>
-            </button>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                >
+                  <path
+                    d="M14.6667 2H1.33337L6.66671 8.30667V12.6667L9.33337 14V8.30667L14.6667 2Z"
+                    stroke="#334155"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+                <span className="hidden text-[12px] font-[500] capitalize leading-[20px] text-[#334155] md:block">
+                  add filter
+                </span>
+              </button>
+            )}
             <div className="ml-auto">
               <div className="flex items-center gap-x-[10px] sm:gap-x-[26px]">
-                <Search
-                  onSearch={handleSearch}
-                  classNames={classNames}
-                  placeholder="Search Clients"
-                />
+                {visibleColumns.length > 0 &&
+                  visibleColumns.includes("payer") && (
+                    <Search
+                      onSearch={handleSearch}
+                      classNames={classNames}
+                      placeholder="Search Clients"
+                    />
+                  )}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
@@ -217,7 +221,9 @@ const Waitlist = () => {
                 </svg>
               </div>
             </div>
-            {<Modal isModalOpen={isModalOpen} setModalOpen={setModalOpen} />}
+            {visibleColumns.length > 0 && (
+              <Modal isModalOpen={isModalOpen} setModalOpen={setModalOpen} />
+            )}
           </div>
         </div>
         {/* Custom filter section end */}
