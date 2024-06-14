@@ -12,7 +12,7 @@ const Table = ({ visibleColumns }: any) => {
     (state: RootState) => state.waitlist,
   );
   const dispatch = useDispatch<AppDispatch>();
-  const [tableLimit, setLimit] = useState<number>(10);
+  const [tableLimit, setLimit] = useState<number>(15);
   const [limitedTableData, setTableData] = useState<ClientType[]>([]);
   const [pageNumbers, setPageNumbers] = useState([1, 2, 3]);
 
@@ -77,7 +77,7 @@ const Table = ({ visibleColumns }: any) => {
     return limitedTableData.length > 0 && visibleColumns.length > 0 ? (
       <>
         {/* table start */}
-        <div className="md:mx-auo relative mb-[12px] max-h-[400px] md:max-h-[800px] overflow-auto rounded-lg border md:max-w-[1350px] xl:max-h-[520px]">
+        <div className="md:mx-auo relative mb-[12px] max-h-[420px] md:max-h-[800px] overflow-auto rounded-lg border md:max-w-[1350px] xl:max-h-[500px]">
           <table className="relative w-[900px] table-fixed text-left xl:w-full">
             <thead className="sticky top-0 z-[4] border-b bg-[#F8FAFC] py-[8px] text-[12px] capitalize leading-[20px] text-[#64748B]">
               <tr>
