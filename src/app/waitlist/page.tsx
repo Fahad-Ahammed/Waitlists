@@ -1,4 +1,5 @@
 import React from "react";
+import { Metadata } from "next";
 import Waitlist from "../templates/waitlist";
 
 const Index = () => {
@@ -7,6 +8,10 @@ const Index = () => {
       <Waitlist />
     </div>
   );
+};
+
+export const metadata: Metadata = {
+  title: 'Waitlist',
 };
 
 export default Index;

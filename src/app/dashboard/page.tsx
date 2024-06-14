@@ -1,9 +1,12 @@
-import React from 'react'
+import React from "react";
+import { Metadata } from "next";
 
 const Dashboard = () => {
-  return (
-    <div>Dashboard page</div>
-  )
-}
+  return <div>Dashboard page</div>;
+};
 
-export default Dashboard
+export const metadata: Metadata = {
+  title: "Dashboard",
+};
+
+export default Dashboard;
