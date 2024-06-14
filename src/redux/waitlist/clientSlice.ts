@@ -20,7 +20,8 @@ type InitialState = {
   filteredPeopleWaitlist: ClientType[];
   filteredServicesProductsWaitlist: {
     searchByName: ClientType[];
-    searchByTag: string[];
+    searchByServiceType: string;
+    searchByStatus: string;
   };
   currentPage: number;
   searchClient: string;
@@ -41,7 +42,7 @@ type InitialState = {
       dropdown: ServiceAndStatus[];
     };
   };
-  chip: Chip;  
+  chip: Chip;
 };
 
 type ServiceAndStatus = {
@@ -59,7 +60,8 @@ type Chip = {
   durationChip: string;
   peopleChip: string[];
   seviceByNameChip: string[];
-  serviceByTagChip: string[];
+  serviceType: string;
+  statusType: string;
 };
 export type TabSlug = "allWaitlists" | "newlyAdded" | "leads";
 export type Tab = {
@@ -177,7 +179,8 @@ const initialChip: Chip = {
   durationChip: "",
   peopleChip: [],
   seviceByNameChip: [],
-  serviceByTagChip: [],
+  serviceType: "",
+  statusType: "",
 };
 
 export const initialDataSet: ClientType[] = [...data];
@@ -205,7 +208,8 @@ const initialState: InitialState = {
   filteredPeopleWaitlist: [],
   filteredServicesProductsWaitlist: {
     searchByName: [],
-    searchByTag: [],
+    searchByServiceType: "",
+    searchByStatus: "",
   },
   currentPage: 1,
   searchClient: "",
@@ -285,10 +289,15 @@ const clientSlice = createSlice({
       state.currentPage = 1;
       state.duration.selectedLabel = "all";
       state.duration.selectedTitle = "All Time";
+      state.tags.serviceType.selectedLabel = "all";
+      state.tags.serviceType.selectedTitle = "show all service type";
+      state.tags.statusType.selectedLabel = "all";
+      state.tags.statusType.selectedTitle = "show all";
       state.filteredScheduleDateWaitlist = clients;
       state.filteredPeopleWaitlist = [];
       state.filteredServicesProductsWaitlist.searchByName = [];
-      state.filteredServicesProductsWaitlist.searchByTag = [];
+      state.filteredServicesProductsWaitlist.searchByServiceType = "";
+      state.filteredServicesProductsWaitlist.searchByStatus = "";
       state.chip = initialChip;
     },
     // Table pagination page setting
@@ -316,7 +325,6 @@ const clientSlice = createSlice({
         action.payload.customDuration ?? null,
       );
       state.chip.durationChip = action.payload.title;
-      
     },
 
     removeScheduledDuration: (state) => {
@@ -381,27 +389,42 @@ const clientSlice = createSlice({
     ) => {
       state.tags.serviceType.selectedLabel = action.payload.label;
       state.tags.serviceType.selectedTitle = action.payload.title;
-      state.filteredServicesProductsWaitlist.searchByTag.push(
-        action?.payload?.title,
-      );
+      state.filteredServicesProductsWaitlist.searchByServiceType =
+        action?.payload?.label == "all" ? "" : action.payload.title;
+      state.chip.serviceType =
+        action?.payload?.label == "all" ? "" : action.payload.title;
     },
+
+    removeServiceType: (state) => {
+      state.tags.serviceType.selectedLabel = "all";
+      state.tags.serviceType.selectedTitle = "show all service type";
+      state.filteredServicesProductsWaitlist.searchByServiceType = "";
+      state.chip.serviceType = "";
+    },
+
     setSelectedStatusType: (
       state,
       action: PayloadAction<{ label: string; title: string }>,
     ) => {
       state.tags.statusType.selectedLabel = action.payload.label;
       state.tags.statusType.selectedTitle = action.payload.title;
-      state.filteredServicesProductsWaitlist.searchByTag.push(
-        action?.payload?.title,
-      );
+      state.filteredServicesProductsWaitlist.searchByStatus =
+        action?.payload?.label == "all" ? "" : action.payload.title;
+      state.chip.statusType =
+        action?.payload?.label == "all" ? "" : action.payload.title;
+    },
+
+    removeStatusType: (state) => {
+      state.tags.statusType.selectedLabel = "all";
+      state.tags.statusType.selectedTitle = "show all";
+      state.filteredServicesProductsWaitlist.searchByStatus = "";
+      state.chip.statusType = "";
     },
 
     applyFilter: (state) => {
       const hasPeople = state.filteredPeopleWaitlist.length > 0;
-      const hasProductOrService =
+      const hasProductOrServiceByName =
         state.filteredServicesProductsWaitlist.searchByName.length > 0;
-      const hasTagSearch =
-        state.filteredServicesProductsWaitlist.searchByTag.length > 0;
 
       // Function to match payer
       const matchPayer = (schedule: ClientType) =>
@@ -416,28 +439,54 @@ const clientSlice = createSlice({
             service.services.toLowerCase() === item.services.toLowerCase(),
         );
 
-      // Function to match services by tag
-      const matchServiceByTag = (item: ClientType) =>
-        state.filteredServicesProductsWaitlist.searchByTag.some(
-          (tag) => tag.toLowerCase() === item.serviceType.toLowerCase(),
-        );
+      const serviceType =
+        state.filteredServicesProductsWaitlist.searchByServiceType;
+      const statusType = state.filteredServicesProductsWaitlist.searchByStatus;
 
       let filteredWaitlist = state.filteredScheduleDateWaitlist; //////////////////////////////
+
       if (hasPeople) {
         filteredWaitlist =
           state.filteredScheduleDateWaitlist.filter(matchPayer);
 
-        if (hasProductOrService) {
+        if (hasProductOrServiceByName) {
           filteredWaitlist = filteredWaitlist.filter(matchServiceByName);
-        } else if (hasTagSearch) {
-          filteredWaitlist = filteredWaitlist.filter(matchServiceByTag);
+        } else if (serviceType && statusType) {          
+          filteredWaitlist = filteredWaitlist.filter(
+            (client: ClientType) =>
+              client.serviceType.toLowerCase() == serviceType.toLowerCase() &&
+              client.statusType.toLowerCase() == statusType.toLowerCase(),
+          );
+        } else if (serviceType) {
+          filteredWaitlist = filteredWaitlist.filter(
+            (client: ClientType) =>
+              client.serviceType.toLowerCase() == serviceType.toLowerCase(),
+          );
+        } else if (statusType) {
+          filteredWaitlist = filteredWaitlist.filter(
+            (client: ClientType) =>
+              client.statusType.toLowerCase() == statusType.toLowerCase(),
+          );
         }
-      } else if (hasProductOrService) {
+      } else if (hasProductOrServiceByName) {
         filteredWaitlist =
           state.filteredScheduleDateWaitlist.filter(matchServiceByName);
-      } else if (hasTagSearch) {
-        filteredWaitlist =
-          state.filteredScheduleDateWaitlist.filter(matchServiceByTag);
+      } else if (serviceType && statusType) {
+        filteredWaitlist = filteredWaitlist.filter(
+          (client: ClientType) =>
+            client.serviceType.toLowerCase() == serviceType.toLowerCase() &&
+            client.statusType.toLowerCase() == statusType.toLowerCase(),
+        );
+      } else if (serviceType) {
+        filteredWaitlist = filteredWaitlist.filter(
+          (client: ClientType) =>
+            client.serviceType.toLowerCase() == serviceType.toLowerCase(),
+        );
+      } else if (statusType) {
+        filteredWaitlist = filteredWaitlist.filter(
+          (client: ClientType) =>
+            client.statusType.toLowerCase() == statusType.toLowerCase(),
+        );
       } else {
         filteredWaitlist = [...state.filteredScheduleDateWaitlist];
       }
@@ -456,7 +505,9 @@ const clientSlice = createSlice({
       state.tags.statusType.selectedTitle = "show all";
       state.filteredPeopleWaitlist = [];
       state.filteredServicesProductsWaitlist.searchByName = [];
-      state.filteredServicesProductsWaitlist.searchByTag = [];
+      state.filteredServicesProductsWaitlist.searchByServiceType = "";
+      state.filteredServicesProductsWaitlist.searchByStatus = "";
+      state.chip = initialChip;
     },
   },
 });
@@ -475,6 +526,8 @@ export const {
   removePeople,
   removeService,
   removeScheduledDuration,
+  removeStatusType,
+  removeServiceType,
 } = clientSlice.actions;
 
 export default clientSlice.reducer;

@@ -138,7 +138,8 @@ const SidePanel = ({ selectedTab, setSelectedTab }: any) => {
       icon: <ServicesOrProductIcon />,
       filterCount:
         filteredServicesProductsWaitlist.searchByName.length +
-        filteredServicesProductsWaitlist.searchByTag.length,
+        Number(filteredServicesProductsWaitlist.searchByServiceType ? 1 : 0) +
+        Number(filteredServicesProductsWaitlist.searchByStatus ? 1 : 0),
     },
   ];
 
@@ -158,7 +159,7 @@ const SidePanel = ({ selectedTab, setSelectedTab }: any) => {
               {tab.icon}
               <span>{tab.name}</span>
               {tab.filterCount > 0 && (
-                <span className="ml-auto hidden sm:block text-[12px] leading-[20px] text-[#64748B80] sm:text-[14px]">
+                <span className="ml-auto hidden text-[12px] leading-[20px] text-[#64748B80] sm:block sm:text-[14px]">
                   {tab.filterCount}
                 </span>
               )}

@@ -77,7 +77,7 @@ const Table = ({ visibleColumns }: any) => {
     return limitedTableData.length > 0 && visibleColumns.length > 0 ? (
       <>
         {/* table start */}
-        <div className="md:mx-auo relative mb-[12px] max-h-[420px] md:max-h-[800px] overflow-auto rounded-lg border md:max-w-[1350px] xl:max-h-[500px]">
+        <div className="md:mx-auo relative mb-[12px] max-h-[420px] overflow-auto rounded-lg border md:max-h-[800px] md:max-w-[1350px] xl:max-h-[500px]">
           <table className="relative w-[900px] table-fixed text-left xl:w-full">
             <thead className="sticky top-0 z-[4] border-b bg-[#F8FAFC] py-[8px] text-[12px] capitalize leading-[20px] text-[#64748B]">
               <tr>
@@ -314,6 +314,60 @@ const Table = ({ visibleColumns }: any) => {
                     </div>
                   </th>
                 )}
+                {visibleColumns.includes("serviceType") && (
+                  <th scope="col" className="w-[152px] pr-[16px] font-[500]">
+                    <div className="flex items-center gap-x-[4px]">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="12"
+                        height="12"
+                        viewBox="0 1 12 12"
+                        fill="none"
+                      >
+                        <path
+                          d="M9.5 10.5V9.5C9.5 8.96957 9.28929 8.46086 8.91421 8.08579C8.53914 7.71071 8.03043 7.5 7.5 7.5H4.5C3.96957 7.5 3.46086 7.71071 3.08579 8.08579C2.71071 8.46086 2.5 8.96957 2.5 9.5V10.5"
+                          stroke="#64748B"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                        <path
+                          d="M6 5.5C7.10457 5.5 8 4.60457 8 3.5C8 2.39543 7.10457 1.5 6 1.5C4.89543 1.5 4 2.39543 4 3.5C4 4.60457 4.89543 5.5 6 5.5Z"
+                          stroke="#64748B"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                      <span>Service Type</span>
+                    </div>
+                  </th>
+                )}
+                {visibleColumns.includes("statusType") && (
+                  <th scope="col" className="w-[152px] pr-[16px] font-[500]">
+                    <div className="flex items-center gap-x-[4px]">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="12"
+                        height="12"
+                        viewBox="0 1 12 12"
+                        fill="none"
+                      >
+                        <path
+                          d="M9.5 10.5V9.5C9.5 8.96957 9.28929 8.46086 8.91421 8.08579C8.53914 7.71071 8.03043 7.5 7.5 7.5H4.5C3.96957 7.5 3.46086 7.71071 3.08579 8.08579C2.71071 8.46086 2.5 8.96957 2.5 9.5V10.5"
+                          stroke="#64748B"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                        <path
+                          d="M6 5.5C7.10457 5.5 8 4.60457 8 3.5C8 2.39543 7.10457 1.5 6 1.5C4.89543 1.5 4 2.39543 4 3.5C4 4.60457 4.89543 5.5 6 5.5Z"
+                          stroke="#64748B"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                      <span>status type</span>
+                    </div>
+                  </th>
+                )}
                 {visibleColumns.includes("scheduled") && (
                   <th scope="col" className="w-[180px] pr-[16px] font-[500]">
                     <div className="flex items-center gap-x-[4px]">
@@ -359,7 +413,7 @@ const Table = ({ visibleColumns }: any) => {
               {limitedTableData.map((item: ClientType, index: number) => {
                 return (
                   <React.Fragment key={index}>
-                    <tr className="border-b bg-white">
+                    <tr className="border-b bg-white capitalize">
                       <td className="w-fit px-[16px]">
                         <div className="flex items-center">
                           <input
@@ -430,6 +484,16 @@ const Table = ({ visibleColumns }: any) => {
                       {visibleColumns.includes("service") && (
                         <td className="w-[20px] truncate py-[10px] pr-[16px] text-[12px] font-[500] leading-[20px] text-[#374151]">
                           {item.services}
+                        </td>
+                      )}
+                      {visibleColumns.includes("serviceType") && (
+                        <td className="py-[10px] pr-[16px] text-[12px] font-[500] leading-[20px] text-[#374151]">
+                          {item.serviceType}
+                        </td>
+                      )}
+                      {visibleColumns.includes("statusType") && (
+                        <td className="py-[10px] pr-[16px] text-[12px] font-[500] leading-[20px] text-[#374151]">
+                          {item.statusType}
                         </td>
                       )}
                       {visibleColumns.includes("scheduled") && (

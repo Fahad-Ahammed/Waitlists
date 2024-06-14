@@ -7,22 +7,19 @@ import {
   setCurrentTabList,
   Tab,
   setSearchClient,
-  removeScheduledDuration,
   applyFilter,
-  removePeople,
-  removeService,
 } from "@/redux/waitlist/clientSlice";
 import Table from "@/app/components/Table";
 import Search from "@/app/components/Search";
 import { SearchStyle } from "@/app/components/Search";
-import { ClientType } from "@/lib/data";
 import dynamic from "next/dynamic";
+import Chip from "@/app/components/Chip";
 
 const Modal = dynamic(() => import("@/app/components/Filter/Modal"));
 const ColumnFilter = dynamic(() => import("@/app/components/ColumnFilter"));
 
 const Waitlist = () => {
-  const { waitlistTabs, currentTabSlug, chip, duration } = useSelector(
+  const { waitlistTabs, currentTabSlug, chip } = useSelector(
     (state: RootState) => state.waitlist,
   );
   const dispatch = useDispatch<AppDispatch>();
@@ -53,6 +50,8 @@ const Waitlist = () => {
     "email",
     "payerPhone",
     "service",
+    "serviceType",
+    "statusType",
     "scheduled",
   ]);
 
@@ -123,7 +122,8 @@ const Waitlist = () => {
                     chip.durationChip ||
                     chip.peopleChip.length > 0 ||
                     chip.seviceByNameChip.length > 0 ||
-                    chip.serviceByTagChip.length > 0
+                    chip.serviceType ||
+                    chip.statusType
                   ) {
                     dispatch(applyFilter());
                   }
@@ -150,7 +150,8 @@ const Waitlist = () => {
                 </span>
               </button>
             )}
-            <div className="mx-[16px] hidden max-w-[40%] items-center overflow-x-scroll lg:flex xl:max-w-[50%]">
+            {visibleColumns.length > 0 && <Chip />}
+            {/* <div className="mx-[16px] hidden max-w-[40%] items-center overflow-x-scroll lg:flex xl:max-w-[50%]">
               {chip.durationChip && duration.selectedLabel !== "all" && (
                 <div className="flex max-h-[36px] max-w-[142px] items-center gap-x-[10px] rounded-[6px] bg-[#F8FAFC] py-[8px] pl-[16px] pr-[8px]">
                   <span className="truncate text-[14px] font-[500] capitalize leading-[20px] text-[#64748B]">
@@ -263,7 +264,67 @@ const Waitlist = () => {
                     </div>
                   );
                 })}
-            </div>
+              {chip.serviceType && (
+                <div className="flex max-h-[36px] max-w-[142px] items-center gap-x-[10px] rounded-[6px] bg-[#F8FAFC] py-[8px] pl-[16px] pr-[8px]">
+                  <span className="truncate text-[14px] font-[500] capitalize leading-[20px] text-[#64748B]">
+                    {chip.serviceType || "Name Missing"}
+                  </span>
+                  <span
+                    onClick={() => {
+                      dispatch(removeServiceType());
+                      dispatch(applyFilter());
+                    }}
+                    className="cursor-pointer bg-[#F1F5F9] p-[6px]"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="14"
+                      height="14"
+                      viewBox="0 0 14 14"
+                      fill="none"
+                    >
+                      <path
+                        d="M10.5 3.5L3.5 10.5M3.5 3.5L10.5 10.5"
+                        stroke="#71717A"
+                        stroke-width="1.67"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </span>
+                </div>
+              )}
+              {chip.statusType && (
+                <div className="flex max-h-[36px] max-w-[142px] items-center gap-x-[10px] rounded-[6px] bg-[#F8FAFC] py-[8px] pl-[16px] pr-[8px]">
+                  <span className="truncate text-[14px] font-[500] capitalize leading-[20px] text-[#64748B]">
+                    {chip.statusType || "Name Missing"}
+                  </span>
+                  <span
+                    onClick={() => {
+                      dispatch(removeStatusType());
+                      dispatch(applyFilter());
+                    }}
+                    className="cursor-pointer bg-[#F1F5F9] p-[6px]"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="14"
+                      height="14"
+                      viewBox="0 0 14 14"
+                      fill="none"
+                    >
+                      <path
+                        d="M10.5 3.5L3.5 10.5M3.5 3.5L10.5 10.5"
+                        stroke="#71717A"
+                        stroke-width="1.67"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </span>
+                </div>
+              )}
+            </div> */}
             <div className="ml-auto">
               <div className="flex items-center gap-x-[10px] sm:gap-x-[26px]">
                 {visibleColumns.length > 0 &&

@@ -18,6 +18,8 @@ const columns: Column[] = [
   { label: "Payer Phone", value: "payerPhone" },
   { label: "Service", value: "service" },
   { label: "Scheduled", value: "scheduled" },
+  { label: "Service Type", value: "serviceType" },
+  { label: "Status Type", value: "statusType" },
 ];
 
 const ColumnFilter: React.FC<ColumnFilterProps> = ({
