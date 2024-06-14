@@ -538,7 +538,7 @@ const NavBar: React.FC<NavBarProps> = ({ isOpen }) => {
                       className="cover"
                       src={"/user.png"}
                       fill
-                      sizes="(max-width: 768px) 100vw"
+                      sizes="(max-width: 768px) 32px,32px"
                       alt="User avatar"
                     />
                   </div>

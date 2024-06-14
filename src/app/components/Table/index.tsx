@@ -519,7 +519,7 @@ const Table = ({ visibleColumns }: any) => {
             <span className="text-[14px] leading-[20px] text-[#64748B] focus:border">
               Displaying
             </span>
-            <div className="flex items-center justify-center gap-[6px] rounded-[6px] bg-[#F8FAFC] px-[12px] py-[4px]">
+            <div className="flex items-center justify-center gap-[2px] rounded-[6px] bg-[#F8FAFC] px-[12px] py-[4px]">
               <div className="flex items-center gap-x-[10px] md:gap-x-0">
                 <button
                   className="h-[30px] px-[6px] md:hidden"
@@ -550,8 +550,9 @@ const Table = ({ visibleColumns }: any) => {
                   ></span>
                 </button>
               </div>
-              <div className="hidden flex-col gap-y-[4px] md:flex">
+              <div className="hidden flex-col gap-y-[4px md:flex">
                 <button
+                className="bg-red300 py-[3px] px-[4px]"
                   onClick={incrementPage}
                   aria-label="Increase table limit"
                 >
@@ -573,6 +574,7 @@ const Table = ({ visibleColumns }: any) => {
                   </svg>
                 </button>
                 <button
+                className="bg-red300 py-[3px] px-[4px]"
                   onClick={decrementPage}
                   aria-label="Decrease table limit"
                 >
