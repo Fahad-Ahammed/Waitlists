@@ -90,6 +90,7 @@ const Waitlist = () => {
                 <button
                   onClick={() => {
                     dispatch(setCurrentTabList(element.slug));
+                    dispatch(applyFilter());
                   }}
                   disabled={currentTabSlug === element.slug}
                   className={`${currentTabSlug === element.slug ? "border-[#64748B]" : "border-[#E2E8F0]"} flex w-full items-center gap-x-[6px] rounded-[6px] border px-[12px] py-[10px]`}

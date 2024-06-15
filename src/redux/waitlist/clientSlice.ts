@@ -28,6 +28,7 @@ type InitialState = {
   duration: {
     selectedLabel: string;
     selectedTitle: string;
+    customDuration?: { from: Date | null; to: Date | null };
     dropDown: Duration[];
   };
   tags: {
@@ -216,6 +217,7 @@ const initialState: InitialState = {
   duration: {
     selectedLabel: "all",
     selectedTitle: "All time",
+    customDuration: { from: null, to: null },
     dropDown: [
       {
         label: "all",
@@ -287,18 +289,11 @@ const clientSlice = createSlice({
       const clients = getClientsByTab(slug);
       state.filteredWaitlist = filterClientsBySearch(clients, "");
       state.currentPage = 1;
-      state.duration.selectedLabel = "all";
-      state.duration.selectedTitle = "All Time";
-      state.tags.serviceType.selectedLabel = "all";
-      state.tags.serviceType.selectedTitle = "show all service type";
-      state.tags.statusType.selectedLabel = "all";
-      state.tags.statusType.selectedTitle = "show all";
-      state.filteredScheduleDateWaitlist = clients;
-      state.filteredPeopleWaitlist = [];
-      state.filteredServicesProductsWaitlist.searchByName = [];
-      state.filteredServicesProductsWaitlist.searchByServiceType = "";
-      state.filteredServicesProductsWaitlist.searchByStatus = "";
-      state.chip = initialChip;
+      state.filteredScheduleDateWaitlist = filterWaitlistByDuration(
+        clients,
+        state.duration.selectedLabel,
+        state.duration.customDuration ?? null,
+      );
     },
     // Table pagination page setting
     setCurrentPage: (state, action: PayloadAction<number>) => {
@@ -313,16 +308,26 @@ const clientSlice = createSlice({
         "payer",
       );
     },
+
+    setCustomDuration: (
+      state,
+      action: PayloadAction<{ from: Date | null; to: Date | null }>,
+    ) => {
+      state.duration.customDuration = action.payload;
+    },
+
     // Date range filter
     setSelectedDuration: (state, action: PayloadAction<Duration>) => {
       state.duration.selectedLabel = action.payload.label;
       state.duration.selectedTitle = action.payload.title;
-
+      if (action.payload.label != "custom") {
+        state.duration.customDuration = { from: null, to: null };
+      }
       const clients = getClientsByTab(state.currentTabSlug);
       state.filteredScheduleDateWaitlist = filterWaitlistByDuration(
         clients,
         state.duration.selectedLabel,
-        action.payload.customDuration ?? null,
+        state.duration.customDuration ?? null,
       );
       state.chip.durationChip = action.payload.title;
     },
@@ -330,6 +335,7 @@ const clientSlice = createSlice({
     removeScheduledDuration: (state) => {
       state.duration.selectedLabel = "all";
       state.duration.selectedTitle = "All time";
+      state.duration.customDuration = { from: null, to: null };
       const clients = getClientsByTab(state.currentTabSlug);
       state.filteredScheduleDateWaitlist = filterWaitlistByDuration(
         clients,
@@ -529,6 +535,7 @@ export const {
   removeScheduledDuration,
   removeStatusType,
   removeServiceType,
+  setCustomDuration,
 } = clientSlice.actions;
 
 export default clientSlice.reducer;

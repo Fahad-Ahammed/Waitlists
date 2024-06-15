@@ -18,7 +18,7 @@ const Modal = ({
   const dispatch = useDispatch<AppDispatch>();
   return (
     <div
-      className={`${isModalOpen ? "pointer-events-auto visible translate-y-[5px] opacity-100" : "pointer-events-none invisible translate-y-[-10px] opacity-0"} absolute left-0 top-[100%] z-10 rounded-[6px] border duration-300 ease-in-out md:h-[400px] w-full max-w-[612px] md:flex-[unset] md:bg-[unset] md:duration-200`}
+      className={`${isModalOpen ? "pointer-events-auto visible translate-y-[5px] opacity-100" : "pointer-events-none invisible translate-y-[-10px] opacity-0"} absolute left-0 top-[100%] z-10 w-full max-w-[612px] rounded-[6px] border duration-300 ease-in-out md:h-[400px] md:flex-[unset] md:bg-[unset] md:duration-200`}
       role="dialog"
       aria-modal="true"
       aria-labelledby="filter-dialog-title"
@@ -34,7 +34,9 @@ const Modal = ({
         </div>
         <div className="flex items-center justify-end gap-x-[16px] border-t px-[16px] py-[8px] text-[14px] font-[500] leading-[24px]">
           <button
-            onClick={() => dispatch(resetToDefault())}
+            onClick={() => {
+              dispatch(resetToDefault());
+            }}
             className="rounded-md bg-[#F4F4F5] px-[16px] py-[6px] text-[#09090B]"
           >
             Reset to Default

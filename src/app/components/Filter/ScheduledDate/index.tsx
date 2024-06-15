@@ -4,7 +4,10 @@ import "react-day-picker/dist/style.css";
 import { CaptionProps, DayPicker, useNavigation } from "react-day-picker";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "@/redux/store";
-import { setSelectedDuration } from "@/redux/waitlist/clientSlice";
+import {
+  setSelectedDuration,
+  setCustomDuration,
+} from "@/redux/waitlist/clientSlice";
 
 const ScheduledDate = () => {
   const { duration } = useSelector((state: RootState) => state.waitlist);
@@ -52,7 +55,8 @@ const ScheduledDate = () => {
                   return (
                     <li
                       onClick={() => {
-                        item.label !== duration.selectedLabel && dispatch(setSelectedDuration(item));
+                        item.label !== duration.selectedLabel &&
+                          dispatch(setSelectedDuration(item));
                         item.label !== duration.selectedLabel &&
                           setDropDown(false);
                       }}
@@ -81,7 +85,7 @@ const ScheduledDate = () => {
                   );
                 },
               )}
-          </ul>
+            </ul>
           </div>
         </div>
         {duration.selectedLabel == "custom" && <Calendar />}
@@ -93,8 +97,7 @@ const ScheduledDate = () => {
 const Calendar = () => {
   type DatePicker = {
     label: string;
-    date: Date | undefined;
-    formattedDate: string | undefined;
+    date: Date | null | undefined;
     toggle: boolean;
   };
   const dispatch = useDispatch<AppDispatch>();
@@ -153,55 +156,31 @@ const Calendar = () => {
     );
   }
 
-  const [selectedDates, setSelectedDates] = useState<{
-    from: { date: Date | undefined; formattedDate: string | undefined };
-    to: { date: Date | undefined; formattedDate: string | undefined };
-  }>({
-    from: { date: undefined, formattedDate: undefined },
-    to: { date: undefined, formattedDate: undefined },
-  });
-
-  useEffect(() => {
-    if (selectedDates.from.date && selectedDates.to.date) {
-      dispatch(
-        setSelectedDuration({
-          label: "custom",
-          title: "Custom",
-          customDuration: {
-            from: selectedDates.from.date || null,
-            to: selectedDates.to.date || null,
-          },
-        }),
-      );
-    }
-  }, [selectedDates]);
+  const { customDuration } = useSelector(
+    (state: RootState) => state.waitlist.duration,
+  );
 
   const [calendarToggle, setToggle] = useState<string | null>(null);
 
-  const handleDateSelect = (date: Date | undefined, label: string) => {
-    const formattedDate = date
-      ? format(date, "yyyy-MM-dd'T'HH:mm:ss")
-      : undefined;
-    setSelectedDates((prevState) => ({
-      ...prevState,
-      [label]: { date, formattedDate },
-      ...(label === "from" && {
-        to: { date: undefined, formattedDate: undefined },
-      }), // reset 'to' date if 'from' date is changed
-    }));
+  const handleDateSelect = (date: Date | null, label: string) => {
+    if (label === "from") {
+      const toDate = null;
+      dispatch(setCustomDuration({ from: date, to: toDate }));
+    } else {
+      const fromDate: Date | null = customDuration?.from ?? null;
+      dispatch(setCustomDuration({ from: fromDate, to: date }));
+    }
   };
 
   const datePicker: DatePicker[] = [
     {
       label: "from",
-      date: selectedDates.from.date,
-      formattedDate: selectedDates.from.formattedDate,
+      date: customDuration?.from ?? null,
       toggle: calendarToggle === "from",
     },
     {
       label: "to",
-      date: selectedDates.to.date,
-      formattedDate: selectedDates.to.formattedDate,
+      date: customDuration?.to ?? null,
       toggle: calendarToggle === "to",
     },
   ];
@@ -221,7 +200,7 @@ const Calendar = () => {
       <div>
         <ul className="flex gap-x-[20px]">
           {datePicker.map((item: DatePicker, index: number) => {
-            const isDisabled = item.label === "to" && !selectedDates.from.date;
+            const isDisabled = item.label === "to" && !customDuration?.from;
             return (
               <li
                 key={index}
@@ -237,6 +216,18 @@ const Calendar = () => {
                     if (!isDisabled) {
                       setToggle((prevState) =>
                         prevState === item.label ? null : item.label,
+                      );
+                    }
+                    if (item.label === "to" && customDuration?.from) {
+                      dispatch(
+                        setSelectedDuration({
+                          label: "custom",
+                          title: "Custom",
+                          customDuration: {
+                            from: customDuration?.from,
+                            to: customDuration?.to,
+                          },
+                        }),
                       );
                     }
                   }}
@@ -278,12 +269,12 @@ const Calendar = () => {
                       Caption: CustomCaptionComponent,
                     }}
                     mode="single"
-                    selected={item.date}
-                    onSelect={(date) => handleDateSelect(date, item.label)}
+                    selected={item.date ?? undefined}
+                    onSelect={(date: any) => handleDateSelect(date, item.label)}
                     showOutsideDays
                     disabled={
-                      item.label === "to" && selectedDates.from.date
-                        ? { before: selectedDates.from.date }
+                      item.label === "to" && customDuration?.from
+                        ? { before: customDuration.from }
                         : undefined
                     }
                     modifiersStyles={modifiersStyles}
