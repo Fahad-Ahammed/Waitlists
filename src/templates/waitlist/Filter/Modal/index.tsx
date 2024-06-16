@@ -2,7 +2,7 @@ import { useState } from "react";
 import ScheduledDate from "../ScheduledDate";
 import People from "../People";
 import ServicesProducts from "../ServicesProducts";
-import SidePanel from "../Modal/SidePanel";
+import SidePanel from "./SidePanel";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
 import { applyFilter, resetToDefault } from "@/redux/waitlist/clientSlice";

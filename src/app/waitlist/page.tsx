@@ -1,6 +1,6 @@
 import React from "react";
 import { Metadata } from "next";
-import Waitlist from "../templates/waitlist";
+import Waitlist from "@/templates/waitlist/";
 
 const Index = () => {
   return (

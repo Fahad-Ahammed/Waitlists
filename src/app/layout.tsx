@@ -4,7 +4,7 @@ import "./globals.css";
 import ReduxProvider from "@/redux/provider";
 import dynamic from "next/dynamic";
 
-const Sidebar = dynamic(() => import("./components/SideBar"));
+const Sidebar = dynamic(() => import("@/components/SideBar"));
 
 export const metadata: Metadata = {
   title: {

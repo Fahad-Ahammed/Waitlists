@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { SearchStyle } from "@/app/components/Search";
+import { SearchStyle } from "@/components/Search";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "@/redux/store";
 import {
@@ -8,7 +8,7 @@ import {
   setSelectedStatusType,
 } from "@/redux/waitlist/clientSlice";
 import { ClientType } from "@/lib/data";
-import { DynamicSearch } from "../People";
+import DynamicSearch from "@/components/DynamicSearch"
 
 type SearchBy = {
   label: string;
@@ -24,10 +24,9 @@ const ServicesProducts = () => {
   const [isServiceDropDown, setServiceDropDown] = useState<boolean>(false);
   const [isStatusDropDown, setStatusDropDown] = useState<boolean>(false);
 
-  const {
-    filteredServicesProductsWaitlist,
-    tags,
-  } = useSelector((state: RootState) => state.waitlist);
+  const { filteredServicesProductsWaitlist, tags } = useSelector(
+    (state: RootState) => state.waitlist,
+  );
   const dispatch = useDispatch<AppDispatch>();
 
   const handleClientSelect = (clients: ClientType[]) => {

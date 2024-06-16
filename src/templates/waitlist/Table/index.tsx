@@ -550,9 +550,9 @@ const Table = ({ visibleColumns }: any) => {
                   ></span>
                 </button>
               </div>
-              <div className="hidden flex-col gap-y-[4px md:flex">
+              <div className="gap-y-[4px hidden flex-col md:flex">
                 <button
-                className="bg-red300 py-[3px] px-[4px]"
+                  className="bg-red300 px-[4px] py-[3px]"
                   onClick={incrementPage}
                   aria-label="Increase table limit"
                 >
@@ -574,7 +574,7 @@ const Table = ({ visibleColumns }: any) => {
                   </svg>
                 </button>
                 <button
-                className="bg-red300 py-[3px] px-[4px]"
+                  className="bg-red300 px-[4px] py-[3px]"
                   onClick={decrementPage}
                   aria-label="Decrease table limit"
                 >

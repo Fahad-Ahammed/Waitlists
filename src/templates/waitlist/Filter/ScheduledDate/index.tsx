@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { format } from "date-fns";
 import "react-day-picker/dist/style.css";
 import { CaptionProps, DayPicker, useNavigation } from "react-day-picker";
